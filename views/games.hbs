@@ -1,0 +1,23 @@
+<!--view table of students-->
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mode</th>
+        <th scope="col">Cost</th>
+        <th scope="col">created_at</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each weapons}}
+        <tr>
+            <th scope="row">{{this.id}}</th>
+            <td>{{this.game_name}}</td>
+            <td>{{this.game_mode}}</td>
+            <td>{{this.cost}}</td>
+            <td>{{this.created_at}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

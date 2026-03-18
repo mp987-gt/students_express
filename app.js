@@ -48,5 +48,3 @@ app.use(function(err, req, res, next) {
 });
 
 export default app;
-
-app.listen(3000);

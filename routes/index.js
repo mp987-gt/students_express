@@ -20,10 +20,12 @@ router.post('/create', async function(req, res, next) {
   
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
+  const regex = /^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{2,30}$/;
 
-  if (!firstName || firstName.length === 0 || !lastName || lastName.length === 0) {
-    return res.status(400).send("Something is empty :D");
-  }
+if (!regex.test(firstName) || !regex.test(lastName)) {
+    return res.status(400).send("Something is wrong :D");
+}
+
     const query = `
         INSERT INTO students (
             firstName,
