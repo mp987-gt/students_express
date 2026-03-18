@@ -8,4 +8,17 @@ router.get('/', async function(req, res, next) {
   res.render('index', { students: students.rows || [] });
 });
 
+router.get('/create', async function(req, res, next) {
+  res.render('forms/student_form');
+})
+
+router.post('/create', async function(req, res, next) {
+  console.log("Submitted data: ", req.body);
+
+  //validate input
+  //add student to DB
+
+  res.redirect(`/`);
+})
+
 export default router;
