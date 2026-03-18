@@ -8,6 +8,7 @@ import logger from 'morgan'
 import indexRouter from './routes/index.js'
 import usersRouter from './routes/users.js'
 import weaponRouter from './routes/dead_space.js'
+import studentRouter from './views/forms/student_form.hbs'
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/weapons', weaponRouter);
+app.use('/student_form', studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -46,3 +48,5 @@ app.use(function(err, req, res, next) {
 });
 
 export default app;
+
+app.listen(3000);

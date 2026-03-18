@@ -2,8 +2,11 @@ import express from 'express';
 const router = express.Router();
 import db from '../db/connector.js';
 
+const port = 3000;
+const app = express();
+
 router.get('/', async function(req, res, next) {
-  const weapon = await db.query('SELECT * FROM users_test');
+  const weapon = await db.query('SELECT * FROM students');
 
   const modWeapons = weapon.rows.map(w => {
     return {
@@ -11,7 +14,13 @@ router.get('/', async function(req, res, next) {
       created_at: w.created_at.toLocaleDateString()
     }
   })
-  res.render('dead_space', { weapons: modWeapons || [] });
+  res.render('student_form.hbs', { weapons: modWeapons || [] });
 });
 
 export default router;
+
+app.use('/', router)
+
+app.listen(port, () => {
+  console.log(`Example app listening on port 127.0.0.1:${port}`)
+});
