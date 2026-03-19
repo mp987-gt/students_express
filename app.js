@@ -10,6 +10,7 @@ import usersRouter from './routes/users.js'
 import weaponRouter from './routes/dead_space.js'
 import carsRouter from './routes/cars.js'
 import slonikiRouter from './routes/sloniki.js'
+import dhdRouter from './routes/dhd.js'
 
 import { fileURLToPath } from 'url';
 
@@ -33,6 +34,7 @@ app.use('/students', usersRouter);
 app.use('/weapons', weaponRouter);
 app.use('/sloniki', slonikiRouter)
 app.use('/cars', carsRouter);
+app.use('/dhd', dhdRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
