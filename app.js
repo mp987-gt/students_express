@@ -9,7 +9,9 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import weaponRouter from "./routes/dead_space.js";
 import catsRouter from "./routes/cats.js";
-import { fileURLToPath } from "url";
+import slonikiRouter from './routes/sloniki.js'
+
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +32,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/weapons", weaponRouter);
 app.use("/cats", catsRouter);
+app.use('/sloniki', slonikiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
