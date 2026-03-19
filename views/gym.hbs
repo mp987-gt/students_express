@@ -1,0 +1,31 @@
+<!--view table of students-->
+<button 
+    style="background-color: rgb(224, 11, 3)">
+    <a style="color:#ffffff" href="/">
+        GO BACK
+    </a>
+</button>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">exercise_name</th>
+        <th scope="col">muscle_target</th>
+        <th scope="col">exercise._efficiency</th>
+        <th scope="col">additional_info</th>
+        <th scope="col">difficult_level</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each exercise}}
+        <tr>
+            <th scope="row">{{this.id}}</th>
+            <td>{{this.exercise_name}}</td>
+            <td>{{this.muscle_target}}</td>
+            <td>{{this.exercise_efficiency}}</td>
+            <td>{{this.additional_info}}</td>
+            <td>{{this.difficult_level}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
