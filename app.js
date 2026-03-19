@@ -29,12 +29,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/weapons", weaponRouter);
+app.use('/', indexRouter);
+app.use('/students', usersRouter);
+app.use('/weapons', weaponRouter);
+app.use('/sloniki', slonikiRouter)
+app.use('/cars', carsRouter);
 app.use("/cats", catsRouter);
-app.use('/sloniki', slonikiRouter);
-app.use("/cars", carsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

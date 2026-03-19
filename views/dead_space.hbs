@@ -9,7 +9,11 @@
     <thead>
     <tr>
         <th scope="col">ID</th>
-        <th scope="col">email</th>
+        <th scope="col">name_of_gun</th>
+        <th scope="col">damage_type</th>
+        <th scope="col">damage_dealth</th>
+        <th scope="col">reload_seconds</th>
+        <th scope="col">additional_info</th>
         <th scope="col">created_at</th>
     </tr>
     </thead>
@@ -17,7 +21,11 @@
     {{#each weapons}}
         <tr>
             <th scope="row">{{this.id}}</th>
-            <td>{{this.email}}</td>
+            <td>{{this.name_of_gun}}</td>
+            <td>{{this.damage_type}}</td>
+            <td>{{this.damage_dealth}}</td>
+            <td>{{this.reload_seconds}}</td>
+            <td>{{this.additional_info}}</td>
             <td>{{this.created_at}}</td>
         </tr>
     {{/each}}

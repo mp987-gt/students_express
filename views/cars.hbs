@@ -1,0 +1,36 @@
+<button 
+    style="background-color: rgb(142, 170, 230)">
+    <a style="color:#ffffff" href="/">
+        GO BACK
+    </a>
+</button>
+
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">CAR BRAND</th>
+        <th scope="col">CAR MODEL</th>
+        <th scope="col">ENGINE TYPE</th>
+        <th scope="col">HORSEPOWER</th>
+        <th scope="col">WEIGHT</th>
+        <th scope="col">ACCELERATION 0 TO 100</th>
+        <th scope="col">PRICE</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {{#each cars}}
+        <tr>
+            <th scope="row">{{this.id}}</th>
+            <td>{{this.car_brand}}</td>
+            <td>{{this.car_model}}</td>
+            <td>{{this.engine_type}}</td>
+            <td>{{this.horsepower}}</td>
+            <td>{{this.weight}}</td>
+            <td>{{this.acceleration_0_to_100}}</td>  
+            <td>{{this.price}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
