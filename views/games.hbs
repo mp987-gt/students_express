@@ -1,32 +1,44 @@
-<button 
-    style="background-color: rgb(242, 130, 208)">
-    <a style="color:#ffffff" href="/">
-        GO BACK
-    </a>
-</button>
-    <table>
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Mode</th>
-            <th scope="col">Cost</th>
-            <th scope="col">Created at</th>
+<div style="position: absolute; top: 20px; left: 20px;">
+    <a href="/" style="
+        display: inline-block;
+        padding: 10px 20px;
+        color: white; 
+        text-decoration: none; 
+        border-radius: 5px;
+        font-weight: bold;
+        font-family: sans-serif;
+        box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3);
+    ">←</a>
+</div>
 
-        </tr>
-        </thead>
-        <tbody>
-        {{#each games}}
+    
+</button>
+    <h1 style="margin-top: 150px; color:rgb(255, 255, 255)">GAMES LIST</h1>
+        <table>
+            <thead>
             <tr>
-                <th scope="row">{{this.id}}</th>
-                <td>{{this.game_name}}</td>
-                <td>{{this.game_mode}}</td>
-                <td>{{this.cost}}</td>
-                <td>{{this.created_at}}</td>
-                
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Mode</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Created at</th>
+
             </tr>
-        {{/each}}
-        </tbody>
-    </table>
-    <p><a style="color:rgb(229, 102, 168)" href="/games/create">ADD GAME</a></p>
-</body>
+            </thead>
+            <tbody>
+            {{#each games}}
+                <tr>
+                    <th scope="row">{{this.id}}</th>
+                    <td>{{this.game_name}}</td>
+                    <td>{{this.game_mode}}</td>
+                    <td>{{this.cost}}</td>
+                    <td>{{this.created_at}}</td>
+
+                    <td><a style="color:rgb(0, 255, 255)" href="/games/update/{{this.id}}">Edit</a></td> 
+                    <td><a style="color:rgb(255, 0, 0)" href="/games/delete/{{this.id}}">Delete</a></td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <p><a style="color:rgb(0, 255, 0)" href="/games/create">ADD GAME</a></p>
+    </body>
