@@ -1,12 +1,12 @@
 <style>
 
 html, body {
-    height: 100%; /* Дозволяємо фону займати всю висоту */
+    height: 100%;
     margin: 0;
 }
 
 body {
-    background: linear-gradient(45deg, #ff0000 0%, #ff0064 20%, #ff00c8 50%, #ff00ff 80%, #9600ff 100%);
+    background: linear-gradient(45deg, #0000 0%, #000032 20%, #19004b 50%, #000032 80%, #0000 100%);
 }
 
 table {
@@ -21,7 +21,6 @@ table {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Заголовки (th) */
 table th {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -34,7 +33,6 @@ table th {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Клітинки (td) */
 table td {
     background: rgba(255, 255, 255, 0.1);
     padding: 12px 15px;
@@ -45,13 +43,11 @@ table td {
     font-size: 20px;
 }
 
-/* Підсвічування рядка при наведенні */
 table tr:hover {
     background: rgba(255, 255, 255, 0.1);
     transition: 0.3s;
 }
 
-/* Стилізація посилань (кнопок) */
 .btn-edit, .btn-delete {
     text-decoration: none;
     padding: 6px 12px;
@@ -106,6 +102,7 @@ table tr:hover {
     top: 20px; 
     left: 20px;
     background-color:rgba(255, 0, 0, 0); 
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 20px;
     display:inline-block;
     padding: 10px 20px;
@@ -117,15 +114,28 @@ table tr:hover {
 }
 
 .btn-list {
-    margin-left: 610px;
+    margin-left: 555px;
     margin-top: 200px; 
     margin-bottom: 20px; 
     color:rgb(255, 255, 255);
 }
+
+.btn-telegram {
+    position: absolute;
+    bottom: 25px; 
+    left: 25px;
+    display:inline-block;
+    padding: 10px 10px;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
 </style>
     <div><a href="/" class="btn-back">←</a></div> 
         </button>
-            <h1 class="btn-list">GAMES LIST</h1>
+            <h1 class="btn-list">👾GAMES LIST👾</h1>
                 <table>
                     <thead>
                         <tr>
@@ -147,10 +157,11 @@ table tr:hover {
                                     <td>{{this.cost}}</td>
                                     <td>{{this.created_at}}</td>
                                     <td><a href="/games/update/{{this.id}}" class="btn-edit">Edit</a></td> 
-                                    <td><a href="/games/delete/{{this.id}}" class="btn-delete">Delete</a></td>
+                                    <td><a href="/games/delete/{{this.id}}" class="btn-delete" onclick="return confirm('YOU SURE?')">Delete</a></td>
                                 </tr>
                             {{/each}}
                         </tbody>
                     </table>
                 <div><a href="/games/create" class="btn-add">ADD</a></div>
+                <div><a href="https://t.me/aptem_oe" class="btn-telegram">T</a></div>
             </body>
