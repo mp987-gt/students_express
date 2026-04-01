@@ -1,16 +1,30 @@
-  <button 
-    style="background-color: rgb(242, 130, 208)">
-    <a style="color:#ffffff" href="/">
+<style>
+    .body{
+        background-image:  #000000;
+       background: #000000;
+background: radial-gradient(circle, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 38%, rgb(0, 0, 0) 100%);
+        height:auto; 
+    }
+      table td, table th {
+    background-color: rgb(10, 10, 10);
+    color: white;
+    padding: 10px 10px; 
+    border: 1px solid #ffffff; 
+    }
+</style>
+     <button 
+    style="background-color: rgb(0, 0, 0)">
+    <a style="color:#ff0000" href="/">
         GO BACK
     </a>
 </button>
   <button 
-    style="background-color: rgb(242, 130, 208)">
-    <a style="color:#ffffff" href="/heroes/add">
+    style="background-color: rgb(0, 0, 0)">
+    <a style="color:#ff0000" href="/heroes_mlbb/add">
         ADD HERO
     </a>
 </button>
-
+<body class="body"></body>
 <table>
     <thead>
     <tr>
@@ -19,6 +33,7 @@
         <th scope="col">Клас</th>
         <th scope="col">Роль</th>
         <th scope="col">Тип атаки</th>
+        <th scope="col"></th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -31,8 +46,8 @@
             <td>{{this.role}}</td>       
             <td>{{this.attack_type}}</td>
 
-            <td><a href="/heroes/edit/{{this.id}}" class="btn-edit">Edit</a></td>
-            <td><a href="/heroes/delete/{{this.id}}" class="btn-delete" onclick="return confirm('Видалити {{this.name}}?')">Delete</a></td>
+            <td><a href="/heroes_mlbb/edit/{{this.id}}" class="btn-edit">Edit</a></td>
+            <td><a href="/heroes_mlbb/delete/{{this.id}}" class="btn-delete" onclick="return confirm('Видалити {{this.name}}?')">Delete</a></td>
             
         </tr>
         {{else}}

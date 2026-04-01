@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Heroes</title>
+</head>
+<body>
+
+<div style="margin-bottom: 20px;">
+  <button style="background-color: rgb(242, 130, 208); border: none; padding: 5px 10px;">
+    <a style="color:#ffffff; text-decoration: none;" href="/">GO BACK</a>
+  </button>
+
+  <button id="add-hero-btn" style="background-color: #4CAF50; color: white; border: none; padding: 7px 15px; margin-left: 10px; cursor: pointer;">
+    Add New Hero
+  </button>
+</div>
+
+<table border="1" style="border-collapse: collapse; text-align: left; width: 100%; max-width: 900px; color: white;">
+  <tr>
+    <th style="padding: 8px;">ID</th>
+    <th style="padding: 8px;">Name</th>
+    <th style="padding: 8px;">Primary Attribute</th>
+    <th style="padding: 8px;">Role</th>
+    <th style="padding: 8px;">Difficulty</th>
+    <th style="padding: 8px;">Created</th>
+    <th style="padding: 8px;">Actions</th>
+  </tr>
+
+  {{#each heroes}}
+  <tr>
+    <td style="padding: 8px;">{{id}}</td>
+    <td style="padding: 8px;">{{name}}</td>
+    <td style="padding: 8px;">{{primary_attribute}}</td>
+    <td style="padding: 8px;">{{role}}</td>
+    <td style="padding: 8px;">{{attack_type}}</td>
+    <td style="padding: 8px;">{{created_at_date}} {{created_at_time}}</td>
+    <td style="padding: 8px;">
+      
+      <a href="/heroes/edit/{{id}}" style="text-decoration: none;">
+        <button style="background-color: #2196F3; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-right: 5px; border-radius: 3px;">
+          Edit
+        </button>
+      </a>
+
+      <button class="delete-hero-btn" data-id="{{id}}" style="background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
+        Delete
+      </button>
+
+    </td>
+  </tr>
+  {{/each}}
+
+</table>
+
+<script>
+  const addBtn = document.getElementById('add-hero-btn');
+  if (addBtn) {
+    addBtn.addEventListener('click', function() {
+      window.location.href = '/heroes/add'; 
+    });
+  }
+
+  const deleteBtns = document.querySelectorAll('.delete-hero-btn');
+  deleteBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const heroId = this.getAttribute('data-id');
+      
+      if (confirm('are you sure you want to delete the hero with ID: ' + heroId + '?')) {
+        fetch('/heroes/' + heroId, {
+          method: 'DELETE'
+        })
+        .then(response => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            alert('Error! Failed to delete the hero.');
+          }
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
