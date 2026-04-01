@@ -44,6 +44,7 @@ app.use('/games', gamesRouter);
 app.use('/weapons', weaponRouter);
 app.use('/sloniki', slonikiRouter);
 app.use('/cars', carsRouter);
+app.use('/heroes_mlbb', heroesRouter); 
 app.use('/gym2', gymRouter);
 app.use('/heroes', heroesRouter); 
 app.use('/cats', catsRouter); 

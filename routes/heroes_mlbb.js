@@ -23,7 +23,7 @@ router.post("/add", async (req, res) => {
     const { hero_name, hero_class, hero_role, attack_type } = req.body;
 
     const query = `
-      INSERT INTO heroes (name, hero_class, role, attack_type)
+      INSERT INTO heroes_mlbb (name, hero_class, role, attack_type)
       VALUES ($1, $2, $3, $4)
     `;
 
@@ -33,7 +33,7 @@ router.post("/add", async (req, res) => {
       hero_role || "Unknown",
       attack_type || "Unknown"
     ]);
-    res.redirect("/heroes"); 
+    res.redirect("/heroes_mlbb"); 
   } catch (err) {
     console.error("DATABASE ERROR:", err.message);
     res.status(500).send("Database Error: " + err.message);
@@ -43,8 +43,8 @@ router.post("/add", async (req, res) => {
 router.get("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await db.query("DELETE FROM heroes WHERE id = $1", [id]);
-    res.redirect("/heroes");
+    await db.query("DELETE FROM heroes_mlbb WHERE id = $1", [id]);
+    res.redirect("/heroes_mlbb");
   } catch (err) {
     res.status(500).send("Could not delete hero"); 
   }
@@ -53,7 +53,7 @@ router.get("/delete/:id", async (req, res) => {
 router.get("/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query("SELECT * FROM heroes WHERE id = $1", [id]);
+    const result = await db.query("SELECT * FROM heroes_mlbb WHERE id = $1", [id]);
     if (result.rows.length === 0) return res.status(400).send("Hero not found");
 
     const hero = result.rows[0];
@@ -69,13 +69,13 @@ router.post("/update/:id", async (req, res) => {
     const { hero_name, hero_class, hero_role, attack_type } = req.body;
 
     const query = `
-      UPDATE heroes
+      UPDATE heroes_mlbb
       SET name = $1, hero_class = $2, role = $3, attack_type = $4
       WHERE id = $5
     `;
 
     await db.query(query, [hero_name, hero_class, hero_role, attack_type, id]);
-    res.redirect("/heroes");
+    res.redirect("/heroes_mlbb");
   } catch (err) {
     res.status(500).send("Error updating hero data");
   }
