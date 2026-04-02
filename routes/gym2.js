@@ -1,129 +1,128 @@
-import express from 'express';
-const router = express.Router();
-import db from '../db/connector.js';
+<!--view table of students-->
+<style>
+    .upper {
+        margin-top: 4vh;
 
-
-router.get('/', async function(req, res, next) {
-  const exercise = await db.query('SELECT * FROM gym2');
-
-  const modExercise = exercise.rows.map(w => {
-    return {
-      ...w,
-      created_at: w.created_at.toLocaleDateString()
-    }
-  })
-  res.render('gym2', { exercise: modExercise || [] });
-});
-router.get('/addExercise', async function(req, res, next) {
-  res.render('forms/gym_form');
-})
-
-router.post('/addExercise', async function(req, res, next) {
-  console.log("Submitted data: ", req.body);
-
-const { exercise_name, difficult_level, required_level, Muscle_name, Sets } = req.body;
-
-  async function addExer(exercise_name, difficult_level, required_level, Muscle_name, Sets) {
-   try {
-      const query = `
-      INSERT INTO gym2 (
-            exercise_name, difficult_level, required_level, Muscle_name, Sets
-        )
-        VALUES ($1, $2, $3, $4, $5) 
-        RETURNING *`;
-   const res = await db.query(query, [exercise_name, difficult_level, required_level, Muscle_name, Sets]);
-
-   } catch (err) 
-      { console.error(err)
-        throw err;
-   }
-}
-
-try {
-    await addExer(exercise_name, difficult_level, required_level, Muscle_name, Sets);
-    
-    res.redirect('/gym2');
-  } catch (err) {
-    res.status(500).send("Помилка при додаванні вправи. Можливо, вона вже існує.");
-  }
-});
-
-router.get("/delete/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    await db.query("DELETE FROM gym2 WHERE id = $1", [id]);
-    res.redirect("/gym2");
-  } catch (err) {
-    console.error("Delete error:", err);
-    res.status(500).send("Could not delete exercise");
-  }
-});
-
-
-
-// Edit
-// -------------------------------------------------------------
-router.get('/edit/:id', async function (req, res, next) {
-  try {
-    const result = await db.query(
-      'SELECT * FROM gym2 WHERE id = $1',
-      [req.params.id]
-    );
-
-    const item = result.rows[0];
-
-    if (!item) {
-      return res.status(404).render('error', {
-        message: 'Gun not found',
-        error: {}
-      });
     }
 
-    res.render('forms/gym_form_edit', {
-      title: 'Edit weapons',
-      mode: 'form',
-      pageTitle: 'Edit weapons',
-      action: `/gym2/edit/${item.id}`,
-      buttonText: 'Save changes',
-      item
-    });
-  } catch (err) {
-    next(err);
-  }
-});
+    .button_back {
+        background-color: #383535;
+        padding: 5px 10px;
+        text-align: center;
+        height: 7vh;
+        border-radius: 12px;
+        font-weight: 400;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        margin-bottom: 5vh;
+        position: relative;
+        right: 10vw;
+        width: 10vw;
+        font-size: 24px;
+        border-color: #383535;
+    }
 
-router.post('/edit/:id', async function (req, res, next) {
-  try {
-    const { exercise_name, difficult_level, required_level, Muscle_name, Sets } = req.body;
+    .body {
+        background-image: #bdc3c7;
+        background: #636363;
+        background: radial-gradient(circle, rgba(99, 99, 99, 1) 0%, rgba(122, 122, 122, 1) 38%, rgba(219, 215, 215, 1) 100%);
+        height: auto;
+    }
 
-    await db.query(
-      `
-      UPDATE gym2
-      SET 
-          exercise_name = $1,
-          difficult_level = $2,
-          required_level = $3,
-          muscle_name = $4,
-          sets = $5
-      WHERE id = $6
-      `,
-       [
-        exercise_name,
-        difficult_level,
-        required_level === '' ? null : required_level,
-        Muscle_name === '' ? null : Muscle_name,
-        Sets === '' ? null : Sets,
-        req.params.id
-      ]
-    );
-      } catch (err) {
-    next(err);
-  }
-    res.redirect('/gym2');
-});
-// -------------------------------------------------------------
+    .button_del {
+        background-color: #383535;
+        padding: 5px 10px;
+        text-align: center;
+        border-color: #383535;
+        border-radius: 8px;
+    }
 
+    .naming {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        width: auto;
+        background-color: #DBD7D7;
+    }
 
+    .typed {
+        font-size: 20px;
+        text-align: center;
+        width: auto;
+        font-weight: 500;
+        font-family: 'Times New Roman', Times, serif;
+        background-color: #F0F0F0;
+    }
 
+    .button_add {
+        background-color: #383535;
+        padding: 10px 10px;
+        text-align: center;
+        height: auto;
+        border-color: #383535;
+        border-radius: 8px;
+    }
 
-export default router;
+    .button_edit {
+        background-color: #383535;
+        padding: 5px 10px;
+        text-align: center;
+        border-color: #383535;
+        border-radius: 8px;
+    }
+
+    .mike {
+        margin-top: 2vh;
+    }
+</style>
+
+<body class="body">
+    <div class="upper">
+        <a href="/">
+            <button class="button_back">Назад</button>
+        </a>
+    </div>
+</body>
+<table>
+    <thead>
+        <tr>
+            <th style="border-radius: 8px 0 0 0 ;" class="naming" scope="col"> ID</th>
+            <th style="border-radius: 0px 0 0 0 ;" class="naming" scope="col">Назва вправи</th>
+            <th class="naming" scope="col">Рівень складності</th>
+            <th class="naming" scope="col">Рівень підготовки</th>
+            <th class="naming" scope="col">Група мязів</th>
+            <th class="naming" scope="col">Кількість підходів</th>
+            <th style="border-radius: 0 8px 0 0 ;" class="naming" scope="col">Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each exercise}}
+        <tr>
+            <td class="typed">{{this.id}}</td>
+            <td class="typed">{{this.exercise_name}}</td>
+            <td class="typed">{{this.difficult_level}}</td>
+            <td class="typed">{{this.required_level}}</td>
+            <td class="typed">{{this.muscle_name}}</td>
+            <td class="typed">{{this.sets}}</td>
+            <td style="background-color:#F0F0F0;  text-align: center;">
+                <button class="button_del">
+                    <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;"
+                        href="/gym2/delete/{{this.id}}">Видалити</a>
+                </button>
+                <button class="button_edit">
+                    <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;"
+                        href="/gym2/edit/{{this.id}}">Змінити</a>
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div>
+    <button class="button_add">
+        <a style="color:#d6d3d3; font-family: 'Times New Roman', Times, serif; text-decoration: none;"
+            href="/gym2/addExercise">Додати вправу</a>
+    </button>
+</div>
+<div class="mike">
+    <img src="/images/maniac_mike.png" alt="Maniac Mike" style="width: 1500px; height: 400px;">
+</div>
