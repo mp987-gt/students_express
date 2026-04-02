@@ -71,7 +71,7 @@
 
             <script>
                 (() => {
-                    const countries = {{{ countries }}};
+                    const countries = {{{countries}}};
                 const countryInput = document.getElementById('countryInput');
                 const countryDropdown = document.getElementById('countryDropdown');
 
@@ -178,8 +178,8 @@
                             <th>ID</th>
                             <th>Food name</th>
                             <th>Country</th>
-                            <th>Spicy</th>
                             <th>Price</th>
+                            <th>Spicy</th>
                             <th>Rating</th>
                             <th>Date</th>
                             <th class="actions-head">Actions</th>
@@ -193,10 +193,10 @@
                             <td class="muted">{{id}}</td>
                             <td class="food-name">{{food_name}}</td>
                             <td>{{country}}</td>
-                            <td>{{spicy_level}}</td>
-                            <td>${{price}}</td>
-                            <td>{{rating}}</td>
-                            <td>{{created_at}}</td>
+                            <td>{{formatted_price}}</td>
+                            <td><span class="badge badge-spicy">{{spicy_level}}</span></td>
+                            <td><span class="badge badge-rating">{{rating}}</span></td>
+                            <td class="date-cell">{{formatted_created_at}}</td>
                             <td>
                                 <div class="row-actions">
                                     <a href="/street_food/edit/{{id}}" class="btn btn-edit">Edit</a>

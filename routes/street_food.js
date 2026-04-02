@@ -37,12 +37,33 @@ function buildFormView({
 
 router.get('/', async function (req, res, next) {
   try {
-    const food = await db.query('SELECT * FROM street_food ORDER BY id ASC');
+    const result = await db.query('SELECT * FROM street_food ORDER BY id ASC');
+
+    const preparedStreetFood = (result.rows || []).map((item) => {
+      const date = new Date(item.created_at);
+
+      const formattedDate = new Intl.DateTimeFormat('uk-UA', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(date);
+
+      const formattedPrice = (item.price ?? null) !== null ? `$${Number(item.price).toFixed(2)}` : '—';
+
+      return {
+        ...item,
+        formatted_created_at: formattedDate,
+        formatted_price: formattedPrice
+      };
+    });
 
     res.render('street_food', {
       title: 'Street Food',
       isForm: false,
-      food: food.rows || []
+      food: preparedStreetFood
     });
   } catch (err) {
     next(err);

@@ -46,7 +46,22 @@ createTableQueries.push(`
   `);
 
 createTableQueries.push(`
+<<<<<<< HEAD
+    CREATE TABLE IF NOT EXISTS street_food (
+    id SERIAL PRIMARY KEY,
+    food_name TEXT NOT NULL,
+    country TEXT NOT NULL,
+    spicy_level INTEGER CHECK (spicy_level BETWEEN 0 AND 10),
+    price NUMERIC(6,2),
+    rating INTEGER CHECK (rating BETWEEN 1 AND 10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    `)
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS SLONIKI (
+=======
  CREATE TABLE IF NOT EXISTS deadSpace (
+>>>>>>> 92b4e9dcbf4f6b2468e87a5878e999b8ace7f40a
     id SERIAL PRIMARY KEY,
     name_of_gun TEXT NOT NULL UNIQUE,
     damage_type TEXT NOT NULL,
@@ -59,13 +74,18 @@ createTableQueries.push(`
 
 for await (const query of createTableQueries) {
     try {
-        console.log(query.slice(0, query.indexOf('(')).trim()+"...")
+        console.log(query.slice(0, query.indexOf('(')).trim() + "...")
         await pool.query(query);
-    } catch(err) {
+    } catch (err) {
         console.error("query execution error: ", err.message);
     }
 }
 
 console.log("CONNECTED!!!!!✅ ")
+<<<<<<< HEAD
+
+export default pool;
+=======
       
 export default pool;
+>>>>>>> 92b4e9dcbf4f6b2468e87a5878e999b8ace7f40a
