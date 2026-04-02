@@ -14,6 +14,7 @@ const pool = new Pool({
     }
 });
 
+
 const createTableQueries = [];
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS heroes (
@@ -55,8 +56,16 @@ createTableQueries.push(`
     additional_info TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
-  `);
-
+ 
+createTableQueries.push(`
+ CREATE TABLE IF NOT EXISTS games_info (
+    id SERIAL PRIMARY KEY,
+    game_name TEXT NOT NULL,
+    game_mode TEXT NOT NULL,      
+    cost TEXT NOT NULL,   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+   
 for await (const query of createTableQueries) {
     try {
         console.log(query.slice(0, query.indexOf('(')).trim()+"...")
