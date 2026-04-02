@@ -53,25 +53,40 @@ createTableQueries.push(`
    );
       `);
 createTableQueries.push(`
+ CREATE TABLE IF NOT EXISTS deadSpace (
+    id SERIAL PRIMARY KEY,
+    name_of_gun TEXT NOT NULL UNIQUE,
+    damage_type TEXT NOT NULL,
+    damage_dealth TEXT NOT NULL,
+    reload_seconds TEXT NOT NULL,           
+    additional_info TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
+   );
+      `);
+    createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS gym2 (
     id SERIAL PRIMARY KEY,
     exercise_name TEXT NOT NULL,              
-    difficult_level TEXT,        
-    required_level TEXT,       
-    muscle_name TEXT,           
-    sets TEXT,                
+    difficult_level TEXT NOT NULL,        
+    required_level TEXT NOT NULL,       
+    muscle_name TEXT NOT NULL,           
+    sets TEXT NOT NULL,                
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-   `);
+    );
+      `);
 for await (const query of createTableQueries) {
     try {
-        console.log(query.slice(0, query.indexOf('(')).trim() + "...")
+        console.log(query.slice(0, query.indexOf('(')).trim()+"...")
         await pool.query(query);
-    } catch (err) {
+    } catch(err) {
         console.error("query execution error: ", err.message);
     }
 }
 
 console.log("CONNECTED!!!!!✅ ")
-
+      
 export default pool;
+
+
+
+
