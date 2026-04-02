@@ -47,7 +47,7 @@ router.post('/createGun', async function (req, res, next) {
     return res.status(400).send("Тип шкоди не може бути пустим рядком");
   } else if (!damage_dealth) {
     return res.status(400).send("Кількість шкоди не може бути пустим рядком");
-  } else if (!damage_dealth = isNaN) {
+  } else if (damage_dealth = isNaN) {
     return res.status(400).send("Кількість шкоди мусить бути числом");
   } else if (damage_dealth < 1) {
     return res.status(400).send("Кількість шкоди не може бути менше 1");
@@ -59,7 +59,7 @@ router.post('/createGun', async function (req, res, next) {
     return res.status(400).send("Час перезарядки не може бути більше 20");
   } else if (!reload_seconds) {
     return res.status(400).send("Час перезарядки не може бути пустим рядком");
-  } else if (!reload_seconds = isNaN) {
+  } else if (reload_seconds = isNaN) {
     return res.status(400).send("Час перезарядки мусить бути числом");
   }
   
@@ -136,7 +136,7 @@ router.post('/edit/:id', async function (req, res, next) {
     return res.status(400).send("Тип шкоди не може бути пустим рядком");
   } else if (!damage_dealth) {
     return res.status(400).send("Кількість шкоди не може бути пустим рядком");
-  } else if (!damage_dealth = isNaN) {
+  } else if (damage_dealth = isNaN) {
     return res.status(400).send("Кількість шкоди мусить бути числом");
   } else if (damage_dealth < 1) {
     return res.status(400).send("Кількість шкоди не може бути менше 1");
@@ -148,7 +148,7 @@ router.post('/edit/:id', async function (req, res, next) {
     return res.status(400).send("Час перезарядки не може бути більше 20");
   } else if (!reload_seconds) {
     return res.status(400).send("Час перезарядки не може бути пустим рядком");
-  } else if (!reload_seconds = isNaN) {
+  } else if (reload_seconds = isNaN) {
     return res.status(400).send("Час перезарядки мусить бути числом");
         }
   } catch (err) {
