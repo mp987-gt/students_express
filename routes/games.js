@@ -46,7 +46,7 @@ if(!regexCost.test(cost)) {
         cost
       ) 
       VALUES ($1, $2, $3) 
-      RETURNING *`;
+      `;
 
     const values = [name, mode, cost];
 
@@ -89,7 +89,7 @@ if(!regexCost.test(cost)) {
           game_mode = $3,
           cost = $4
       WHERE id = $1
-      RETURNING*`;
+      `;
 
     const values = [id, name, mode, cost];
 
@@ -109,7 +109,7 @@ router.get('/delete/:id', async function(req, res, next) {
   const query = `
     DELETE FROM games_info
     WHERE id = $1
-    RETURNING*`;
+    `;
 
   const values = [id];
   
