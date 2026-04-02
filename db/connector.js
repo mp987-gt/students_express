@@ -57,6 +57,16 @@ createTableQueries.push(`
    );
   `);
 
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS accounts(
+    id SERIAL PRIMARY KEY,
+    user_name TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL,           
+    password TEXT NOT NULL,
+    adding_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    `);
+
 for await (const query of createTableQueries) {
     try {
         console.log(query.slice(0, query.indexOf('(')).trim()+"...")
