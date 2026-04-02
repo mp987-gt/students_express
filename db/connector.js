@@ -56,7 +56,20 @@ createTableQueries.push(`
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
   `);
-
+createTableQueries.push(`
+        CREATE TABLE IF NOT EXISTS cars (
+        id SERIAL PRIMARY KEY,
+        car_brand TEXT NOT NULL,
+        car_model TEXT NOT NULL,
+        engine_type TEXT NOT NULL,
+        horsepower TEXT NOT NULL,
+        weight TEXT,
+        acceleration_0_to_100 TEXT,
+        price TEXT, 
+        is_available BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+        `);
 for await (const query of createTableQueries) {
     try {
         console.log(query.slice(0, query.indexOf('(')).trim()+"...")
