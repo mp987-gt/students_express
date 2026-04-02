@@ -55,7 +55,19 @@ createTableQueries.push(`
     additional_info TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
-  `);
+`);
+
+createTableQueries.push(`CREATE TABLE IF NOT EXISTS heroes_mlbb (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,              
+    hero_class TEXT,        
+    role TEXT,       
+    attack_type TEXT,                                   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+`);
+
 
 for await (const query of createTableQueries) {
     try {

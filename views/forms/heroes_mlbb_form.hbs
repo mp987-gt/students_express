@@ -3,7 +3,27 @@
 {{else}}
     <form method="POST" action="/heroes_mlbb/add">
 {{/if}}
-    <fieldset>
+<style>
+    body{
+               background: #000000;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 0%, rgba(158, 68, 68, 1) 23%, rgba(255, 0, 0, 1) 50%, rgba(184, 73, 73, 1) 76%, rgba(0, 0, 0, 1) 100%);
+        height: 100vh;     
+    }
+        .action_buttons {
+        color: #ff0000;
+        style="text-decoration: none;
+    }
+    .save_button {
+        background-color: rgb(32, 32, 32);
+        width: auto;
+        border: #2e2e2e;
+    }
+    .naming{
+        text-align: center;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+</style>
+    <fieldset class="naming">
         <label>
             Name
             <input name="hero_name" value="{{hero.name}}" placeholder="Enter the name of the hero" />
@@ -22,5 +42,11 @@
         </label>
     </fieldset>
 
-    <input type="submit" value="SAVE" />
+    <button class="save_button">
+    <a class="action_buttons" style="font-family: Georgia, 'Times New Roman', Times, serif;  text-decoration: none;"
+        href="/heroes_mlbb/add">
+        SAVE
+    </a>
+</button>
+
 </form>
