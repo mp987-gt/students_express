@@ -21,6 +21,7 @@ import streetFoodRouter from './routes/street_food.js'
 import heroessRouter from './routes/heroes.js'
 import presidentRouter from './routes/president.js'
 import productRouter from './routes/product.js'
+import barRouter from './routes/bar.js'
 
 import { fileURLToPath } from 'url';
 
@@ -53,9 +54,10 @@ app.use('/gym2', gymRouter);
 app.use('/dhd', dhdRouter);
 app.use('/street_food', streetFoodRouter);
 app.use('/product', productRouter);
+app.use('/bar', barRouter);
 
 app.use((err, req, res, next) => {
-  console.error('Global error caught:', err.message);
+  console.error('Global error caught:', err || 'Unknown error');
 
   res.status(500).render('error', { 
     message: 'Something went wrong',

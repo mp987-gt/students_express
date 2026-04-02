@@ -1,0 +1,67 @@
+<style>
+   
+    body{
+        background-image: linear-gradient( #000000, #ff7b00); 
+        height:100vh
+    }
+    </style>
+
+
+
+<button 
+    style="background-color: #ec8e01; 
+    border-radius: 24px; 
+        font-family: Garamond; 
+        font-weight: 600; 
+        font-size: 24px; 
+        width: 10vw; 
+        margin-bottom: 5vh;
+        position: relative;
+        right: 10vw;
+        border: none;">
+    <a style="color:#000000; text-decoration: none;" href="/bar">
+        Назад
+    </a>
+</button>
+
+
+
+<form method="POST" action="{{action}}">
+    <fieldset>
+        <label>
+            
+       <a style="color: #ffffff;text-decoration: none;" >
+            Назва 
+            </a>
+            <input name="bar_name" placeholder="Назва" required />
+        </label>
+        
+ 
+          <label>
+            <a style="color: #ffffff;text-decoration: none;" >
+               Ціна ₴  
+            </a>
+       
+  <input type="text" name="cost"  placeholder="Ціна ₴" required />
+         </label>
+
+        
+        <label>
+            <a style="color: #ffffff;text-decoration: none;" >
+             Дата створення
+            </a>
+      
+            <input name="created_at" placeholder="Дата створення" />
+        </label>
+        
+    </fieldset>
+    
+
+    
+               <button type="submit" value="Додати" style="background-color: #ec8e01; border: none;
+        border-radius: 24px;">
+            <p style="color: #000000;font-family: Garamond; font-size: 25px; text-decoration: none; ">Додати</p>
+            </button>
+     
+        
+</form>
