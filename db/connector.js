@@ -56,6 +56,17 @@ createTableQueries.push(`
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
   `);
+createTableQueries.push(`
+ CREATE TABLE IF NOT EXISTS desperate_housewives_1 (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password_hash TEXT NOT NULL,                       
+    season TEXT NOT NULL,
+    reason TEXT NOT NULL,  
+    character_notes TEXT,             
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
+  `);  
 
 for await (const query of createTableQueries) {
     try {
