@@ -57,7 +57,7 @@ app.use('/street_food', streetFoodRouter);
 app.use('/product', productRouter);
 app.use('/bar', barRouter);
 app.use('/accounts', accountsRouter);
-
+app.use('/president',presidentRouter)
 app.use((err, req, res, next) => {
   console.error('Global error caught:', err || 'Unknown error');
 
