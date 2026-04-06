@@ -56,6 +56,7 @@ createTableQueries.push(`
     additional_info TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
+   `);
  
 
 
@@ -76,6 +77,7 @@ createTableQueries.push(`
     cost TEXT NOT NULL,   
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+`);
    
 for await (const query of createTableQueries) {
     try {
