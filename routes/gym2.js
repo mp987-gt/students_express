@@ -3,7 +3,7 @@ const router = express.Router();
 import db from '../db/connector.js';
 
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function (req, res, next) {
   const exercise = await db.query('SELECT * FROM gym2');
 
   const modExercise = exercise.rows.map(w => {
@@ -14,34 +14,34 @@ router.get('/', async function(req, res, next) {
   })
   res.render('gym2', { exercise: modExercise || [] });
 });
-router.get('/addExercise', async function(req, res, next) {
+router.get('/addExercise', async function (req, res, next) {
   res.render('forms/gym_form');
 })
 
-router.post('/addExercise', async function(req, res, next) {
+router.post('/addExercise', async function (req, res, next) {
   console.log("Submitted data: ", req.body);
 
-const { exercise_name, difficult_level, required_level, Muscle_name, Sets } = req.body;
+  const { exercise_name, difficult_level, required_level, Muscle_name, Sets } = req.body;
 
   async function addExer(exercise_name, difficult_level, required_level, Muscle_name, Sets) {
-   try {
+    try {
       const query = `
       INSERT INTO gym2 (
             exercise_name, difficult_level, required_level, Muscle_name, Sets
         )
         VALUES ($1, $2, $3, $4, $5) 
         RETURNING *`;
-   const res = await db.query(query, [exercise_name, difficult_level, required_level, Muscle_name, Sets]);
+      const res = await db.query(query, [exercise_name, difficult_level, required_level, Muscle_name, Sets]);
 
-   } catch (err) 
-      { console.error(err)
-        throw err;
-   }
-}
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+  }
 
-try {
+  try {
     await addExer(exercise_name, difficult_level, required_level, Muscle_name, Sets);
-    
+
     res.redirect('/gym2');
   } catch (err) {
     res.status(500).send("Помилка при додаванні вправи. Можливо, вона вже існує.");
@@ -74,15 +74,15 @@ router.get('/edit/:id', async function (req, res, next) {
 
     if (!item) {
       return res.status(404).render('error', {
-        message: 'Gun not found',
+        message: 'exercise not found',
         error: {}
       });
     }
 
     res.render('forms/gym_form_edit', {
-      title: 'Edit weapons',
+      title: 'Edit exercises',
       mode: 'form',
-      pageTitle: 'Edit weapons',
+      pageTitle: 'Edit exercises',
       action: `/gym2/edit/${item.id}`,
       buttonText: 'Save changes',
       item
@@ -99,15 +99,14 @@ router.post('/edit/:id', async function (req, res, next) {
     await db.query(
       `
       UPDATE gym2
-      SET 
-          exercise_name = $1,
+      SET exercise_name = $1,
           difficult_level = $2,
           required_level = $3,
-          muscle_name = $4,
-          sets = $5
+          Muscle_name = $4,
+          Sets = $5
       WHERE id = $6
       `,
-       [
+      [
         exercise_name,
         difficult_level,
         required_level === '' ? null : required_level,
@@ -116,10 +115,10 @@ router.post('/edit/:id', async function (req, res, next) {
         req.params.id
       ]
     );
-      } catch (err) {
+  } catch (err) {
     next(err);
   }
-    res.redirect('/gym2');
+  res.redirect('/gym2');
 });
 // -------------------------------------------------------------
 

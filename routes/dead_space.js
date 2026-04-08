@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import db from '../db/connector.js';
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function (req, res, next) {
   const weapon = await db.query('SELECT * FROM deadSpace');
 
   const modWeapons = weapon.rows.map(w => {
@@ -16,37 +16,57 @@ router.get('/', async function(req, res, next) {
 
 // Add
 // -------------------------------------------------------------
-router.get('/createGun', async function(req, res, next) {
+router.get('/createGun', async function (req, res, next) {
   res.render('forms/dead_space_form');
 })
 
-router.post('/createGun', async function(req, res, next) {
+router.post('/createGun', async function (req, res, next) {
   console.log("Submitted data: ", req.body);
 
-const { name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info } = req.body;
+  const { name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info } = req.body;
+
+  if (!name_of_gun) {
+    return res.status(400).send("Назва зброї не може бути пустим рядком");
+  } else if (!damage_type) {
+    return res.status(400).send("Тип шкоди не може бути пустим рядком");
+  } else if (!damage_dealth) {
+    return res.status(400).send("Кількість шкоди не може бути пустим рядком");
+  } else if (damage_dealth < 1) {
+    return res.status(400).send("Кількість шкоди не може бути менше 1");
+  } else if (damage_dealth > 20) {
+    return res.status(400).send("Кількість шкоди не може бути більше 20");
+  } else if (!reload_seconds) {
+    return res.status(400).send("Час перезарядки не може бути пустим рядком");
+  } else if (reload_seconds < 1) {
+    return res.status(400).send("Час перезарядки не може бути менше 1");
+  } else if (reload_seconds > 14) {
+    return res.status(400).send("Час перезарядки не може бути більше 14");
+  }
 
   async function addGun(name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info) {
-   try {
+    try {
       const query = `
       INSERT INTO deadSpace (
             name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info
         )
         VALUES ($1, $2, $3, $4, $5) 
         RETURNING *`;
-   const res = await db.query(query, [name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info]);
 
-   } catch (err) 
-      { console.error(err)
-        throw err;
-   }
-}
+      const res = await db.query(query, [name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info]);
 
-try {
+
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+  }
+
+  try {
     await addGun(name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info);
-    
+
     res.redirect('/weapons');
   } catch (err) {
-    res.status(500).send("Помилка при додаванні зброї. Схоже що ви вказали щось неправильно.");
+    res.status(500).send("Помилка при додаванні зброї. Схоже що ви вказали щось неправильно, або взагалі нічого не вказали");
   }
 });
 // -------------------------------------------------------------
@@ -74,9 +94,10 @@ router.get('/edit/:id', async function (req, res, next) {
       mode: 'form',
       pageTitle: 'Edit weapons',
       action: `/weapons/edit/${item.id}`,
-      buttonText: 'Save changes',
+      buttonText: 'save changes',
       item
     });
+
   } catch (err) {
     next(err);
   }
@@ -85,6 +106,24 @@ router.get('/edit/:id', async function (req, res, next) {
 router.post('/edit/:id', async function (req, res, next) {
   try {
     const { name_of_gun, damage_type, damage_dealth, reload_seconds, additional_info } = req.body;
+
+    if (!name_of_gun) {
+      return res.status(400).send("Назва зброї не може бути пустим рядком");
+    } else if (!damage_type) {
+      return res.status(400).send("Тип шкоди не може бути пустим рядком");
+    } else if (!damage_dealth) {
+      return res.status(400).send("Кількість шкоди не може бути пустим рядком");
+    } else if (damage_dealth < 1) {
+      return res.status(400).send("Кількість шкоди не може бути менше 1");
+    } else if (damage_dealth > 20) {
+      return res.status(400).send("Кількість шкоди не може бути більше 20");
+    } else if (!reload_seconds) {
+      return res.status(400).send("Час перезарядки не може бути пустим рядком");
+    } else if (reload_seconds < 1) {
+      return res.status(400).send("Час перезарядки не може бути менше 1");
+    } else if (reload_seconds > 14) {
+      return res.status(400).send("Час перезарядки не може бути більше 14");
+    }
 
     await db.query(
       `
@@ -97,19 +136,24 @@ router.post('/edit/:id', async function (req, res, next) {
           additional_info = $5
       WHERE id = $6
       `,
-       [
+
+      [
         name_of_gun,
         damage_type,
-        damage_dealth === '' ? null : damage_dealth,
-        reload_seconds === '' ? null : reload_seconds,
-        additional_info === '' ? null : additional_info,
+        damage_dealth,
+        reload_seconds,
+        additional_info,
         req.params.id
       ]
     );
-      } catch (err) {
+
+
+  } catch (err) {
     next(err);
   }
-    res.redirect('/weapons');
+  res.redirect('/weapons');
+
+
 });
 // -------------------------------------------------------------
 

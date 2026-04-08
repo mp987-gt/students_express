@@ -12,7 +12,68 @@ function normalizeCountry(value) {
 
 function isValidCountry(country) {
   const normalized = normalizeCountry(country);
-  return countries.some(item => item.toLowerCase() === normalized);
+  return countries.some((item) => item.toLowerCase() === normalized);
+}
+
+function validateStreetFoodForm(formData) {
+  const fieldErrors = {};
+
+  const foodName = String(formData.food_name || '').trim();
+  const country = String(formData.country || '').trim();
+
+  const spicyLevel =
+    formData.spicy_level === '' || formData.spicy_level === undefined
+      ? null
+      : Number(formData.spicy_level);
+
+  const price =
+    formData.price === '' || formData.price === undefined
+      ? null
+      : Number(formData.price);
+
+  const rating =
+    formData.rating === '' || formData.rating === undefined
+      ? null
+      : Number(formData.rating);
+
+  if (!foodName) {
+    fieldErrors.food_name = 'Назва страви є обов’язковою';
+  }
+
+  if (!country) {
+    fieldErrors.country = 'Країна є обов’язковою';
+  } else if (!isValidCountry(country)) {
+    fieldErrors.country = 'Оберіть країну зі списку';
+  }
+
+  if (
+    spicyLevel !== null &&
+    (!Number.isInteger(spicyLevel) || spicyLevel < 0 || spicyLevel > 10)
+  ) {
+    fieldErrors.spicy_level = 'Рівень гостроти повинен бути від 0 до 10';
+  }
+
+  if (price !== null && (Number.isNaN(price) || price < 0.01)) {
+    fieldErrors.price = 'Ціна повинна бути не меншою за 0.01';
+  }
+
+  if (
+    rating !== null &&
+    (!Number.isInteger(rating) || rating < 1 || rating > 10)
+  ) {
+    fieldErrors.rating = 'Рейтинг повинен бути від 1 до 10';
+  }
+
+  return {
+    fieldErrors,
+    sanitizedData: {
+      food_name: foodName,
+      country,
+      spicy_level: spicyLevel,
+      price,
+      rating
+    }
+  };
 }
 
 function buildFormView({
@@ -21,7 +82,8 @@ function buildFormView({
   action,
   buttonText,
   item = {},
-  formError = ''
+  formError = '',
+  fieldErrors = {}
 }) {
   return {
     title,
@@ -31,18 +93,43 @@ function buildFormView({
     buttonText,
     item,
     countries: JSON.stringify(countries),
-    formError
+    formError,
+    fieldErrors
   };
 }
 
 router.get('/', async function (req, res, next) {
   try {
-    const food = await db.query('SELECT * FROM street_food ORDER BY id ASC');
+    const result = await db.query('SELECT * FROM street_food ORDER BY id ASC');
+
+    const preparedStreetFood = (result.rows || []).map((item) => {
+      const date = new Date(item.created_at);
+
+      const formattedDate = new Intl.DateTimeFormat('uk-UA', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(date);
+
+      const formattedPrice =
+        item.price !== null && item.price !== undefined
+          ? `$${Number(item.price).toFixed(2)}`
+          : '—';
+
+      return {
+        ...item,
+        formatted_created_at: formattedDate,
+        formatted_price: formattedPrice
+      };
+    });
 
     res.render('street_food', {
       title: 'Street Food',
       isForm: false,
-      food: food.rows || []
+      food: preparedStreetFood
     });
   } catch (err) {
     next(err);
@@ -57,16 +144,17 @@ router.get('/new', function (req, res) {
       pageTitle: 'Add new food',
       action: '/street_food/create',
       buttonText: 'Create food',
-      item: {}
+      item: {},
+      fieldErrors: {}
     })
   );
 });
 
 router.post('/create', async function (req, res, next) {
   try {
-    const { food_name, country, spicy_level, price, rating } = req.body;
+    const { fieldErrors, sanitizedData } = validateStreetFoodForm(req.body);
 
-    if (!isValidCountry(country)) {
+    if (Object.keys(fieldErrors).length > 0) {
       return res.status(400).render(
         'street_food',
         buildFormView({
@@ -75,23 +163,19 @@ router.post('/create', async function (req, res, next) {
           action: '/street_food/create',
           buttonText: 'Create food',
           item: req.body,
-          formError: 'Please choose a valid country from the list.'
+          fieldErrors
         })
       );
     }
+
+    const { food_name, country, spicy_level, price, rating } = sanitizedData;
 
     await db.query(
       `
       INSERT INTO street_food (food_name, country, spicy_level, price, rating)
       VALUES ($1, $2, $3, $4, $5)
       `,
-      [
-        food_name?.trim() || '',
-        country.trim(),
-        spicy_level === '' ? null : spicy_level,
-        price === '' ? null : price,
-        rating === '' ? null : rating
-      ]
+      [food_name, country, spicy_level, price, rating]
     );
 
     res.redirect('/street_food');
@@ -123,7 +207,8 @@ router.get('/edit/:id', async function (req, res, next) {
         pageTitle: 'Edit food',
         action: `/street_food/update/${item.id}`,
         buttonText: 'Save changes',
-        item
+        item,
+        fieldErrors: {}
       })
     );
   } catch (err) {
@@ -133,9 +218,9 @@ router.get('/edit/:id', async function (req, res, next) {
 
 router.post('/update/:id', async function (req, res, next) {
   try {
-    const { food_name, country, spicy_level, price, rating } = req.body;
+    const { fieldErrors, sanitizedData } = validateStreetFoodForm(req.body);
 
-    if (!isValidCountry(country)) {
+    if (Object.keys(fieldErrors).length > 0) {
       return res.status(400).render(
         'street_food',
         buildFormView({
@@ -147,10 +232,12 @@ router.post('/update/:id', async function (req, res, next) {
             id: req.params.id,
             ...req.body
           },
-          formError: 'Please choose a valid country from the list.'
+          fieldErrors
         })
       );
     }
+
+    const { food_name, country, spicy_level, price, rating } = sanitizedData;
 
     await db.query(
       `
@@ -162,14 +249,7 @@ router.post('/update/:id', async function (req, res, next) {
           rating = $5
       WHERE id = $6
       `,
-      [
-        food_name?.trim() || '',
-        country.trim(),
-        spicy_level === '' ? null : spicy_level,
-        price === '' ? null : price,
-        rating === '' ? null : rating,
-        req.params.id
-      ]
+      [food_name, country, spicy_level, price, rating, req.params.id]
     );
 
     res.redirect('/street_food');
@@ -180,11 +260,7 @@ router.post('/update/:id', async function (req, res, next) {
 
 router.post('/delete/:id', async function (req, res, next) {
   try {
-    await db.query(
-      'DELETE FROM street_food WHERE id = $1',
-      [req.params.id]
-    );
-
+    await db.query('DELETE FROM street_food WHERE id = $1', [req.params.id]);
     res.redirect('/street_food');
   } catch (err) {
     next(err);

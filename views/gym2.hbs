@@ -1,45 +1,50 @@
 <!--view table of students-->
 <style>
-    .upper{
+    .upper {
         margin-top: 4vh;
-        
+
     }
-    .button_back{
+
+    .button_back {
         background-color: #383535;
         padding: 5px 10px;
         text-align: center;
         height: 7vh;
-        border-radius: 12px;  
-        font-weight: 400; 
+        border-radius: 12px;
+        font-weight: 400;
         font-family: Georgia, 'Times New Roman', Times, serif;
         margin-bottom: 5vh;
         position: relative;
         right: 10vw;
-        width: 10vw; 
-        font-size: 24px; 
+        width: 10vw;
+        font-size: 24px;
         border-color: #383535;
     }
-    .body{
-        background-image:  #bdc3c7;
-       background: #636363;
-background: radial-gradient(circle, rgba(99, 99, 99, 1) 0%, rgba(122, 122, 122, 1) 38%, rgba(219, 215, 215, 1) 100%);
-        height:auto; 
+
+    .body {
+        background-image: #bdc3c7;
+        background: #636363;
+        background: radial-gradient(circle, rgba(99, 99, 99, 1) 0%, rgba(122, 122, 122, 1) 38%, rgba(219, 215, 215, 1) 100%);
+        height: auto;
     }
-    .button_del{
+
+    .button_del {
         background-color: #383535;
         padding: 5px 10px;
         text-align: center;
         border-color: #383535;
-        border-radius: 8px; 
+        border-radius: 8px;
     }
-    .naming{
+
+    .naming {
         font-size: 20px;
         font-weight: bold;
         text-align: center;
         width: auto;
         background-color: #DBD7D7;
     }
-    .typed{
+
+    .typed {
         font-size: 20px;
         text-align: center;
         width: auto;
@@ -47,46 +52,50 @@ background: radial-gradient(circle, rgba(99, 99, 99, 1) 0%, rgba(122, 122, 122, 
         font-family: 'Times New Roman', Times, serif;
         background-color: #F0F0F0;
     }
-    .button_add{
+
+    .button_add {
         background-color: #383535;
         padding: 10px 10px;
         text-align: center;
         height: auto;
         border-color: #383535;
-        border-radius: 8px; 
+        border-radius: 8px;
     }
-    .button_edit{
-         background-color: #383535;
+
+    .button_edit {
+        background-color: #383535;
         padding: 5px 10px;
         text-align: center;
         border-color: #383535;
-        border-radius: 8px; 
+        border-radius: 8px;
     }
-    .mike{
+
+    .mike {
         margin-top: 2vh;
     }
 </style>
+
 <body class="body">
-<div class="upper">
-    <a href="/">
-    <button class="button_back">Назад</button>
-    </a>
-</div>
-</body>      
+    <div class="upper">
+        <a href="/">
+            <button class="button_back">Назад</button>
+        </a>
+    </div>
+</body>
 <table>
     <thead>
-    <tr>
-        <th style="border-radius: 8px 0 0 0 ;" class="naming" scope="col"> ID</th>
-        <th style="border-radius: 0px 0 0 0 ;" class="naming" scope="col">Назва вправи</th>
-        <th class="naming" scope="col">Рівень складності</th>
-        <th class="naming" scope="col">Рівень підготовки</th>
-        <th class="naming" scope="col">Група мязів</th>
-        <th class="naming" scope="col">Кількість підходів</th>
-        <th style="border-radius: 0 8px 0 0 ;"class="naming" scope="col">Дії</th>
-    </tr>
+        <tr>
+            <th style="border-radius: 8px 0 0 0 ;" class="naming" scope="col"> ID</th>
+            <th style="border-radius: 0px 0 0 0 ;" class="naming" scope="col">Назва вправи</th>
+            <th class="naming" scope="col">Рівень складності</th>
+            <th class="naming" scope="col">Рівень підготовки</th>
+            <th class="naming" scope="col">Група мязів</th>
+            <th class="naming" scope="col">Кількість підходів</th>
+            <th style="border-radius: 0 8px 0 0 ;" class="naming" scope="col">Дії</th>
+        </tr>
     </thead>
     <tbody>
-    {{#each exercise}}
+        {{#each exercise}}
         <tr>
             <td class="typed">{{this.id}}</td>
             <td class="typed">{{this.exercise_name}}</td>
@@ -95,22 +104,25 @@ background: radial-gradient(circle, rgba(99, 99, 99, 1) 0%, rgba(122, 122, 122, 
             <td class="typed">{{this.muscle_name}}</td>
             <td class="typed">{{this.sets}}</td>
             <td style="background-color:#F0F0F0;  text-align: center;">
-                  <button class="button_del" >
-                      <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;" href="/gym2/delete/{{this.id}}">Видалити</a>
-                  </button>   
-                  <button class="button_edit">
-                      <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;" href="/gym2/edit/{{this.id}}">Змінити</a>
-                  </button>
+                <button class="button_del">
+                    <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;"
+                        href="/gym2/delete/{{this.id}}">Видалити</a>
+                </button>
+                <button class="button_edit">
+                    <a style="color:#d6d3d3; text-decoration: none; font-family: 'Times New Roman', Times, serif;"
+                        href="/gym2/edit/{{this.id}}">Змінити</a>
+                </button>
             </td>
         </tr>
-    {{/each}}
+        {{/each}}
     </tbody>
 </table>
-  <div>
+<div>
     <button class="button_add">
-    <a style="color:#d6d3d3; font-family: 'Times New Roman', Times, serif; text-decoration: none;" href="/gym2/addExercise">Додати вправу</a>
+        <a style="color:#d6d3d3; font-family: 'Times New Roman', Times, serif; text-decoration: none;"
+            href="/gym2/addExercise">Додати вправу</a>
     </button>
-    </div>
-    <div class="mike">
-    <img  src="/images/maniac_mike.png" alt="Maniac Mike" style="width: 1500px; height: 400px;">
-    </div>
+</div>
+<div class="mike">
+    <img src="/images/maniac_mike.png" alt="Maniac Mike" style="width: 1500px; height: 400px;">
+</div>
