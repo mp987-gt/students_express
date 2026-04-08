@@ -33,6 +33,12 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+import hbs from 'hbs';
+
+hbs.registerHelper('eq', function (a, b) {
+  return a === b;
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
