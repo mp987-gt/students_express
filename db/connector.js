@@ -177,6 +177,23 @@ createTableQueries.push(`CREATE TABLE IF NOT EXISTS heroes_mlbb (
 
 `);
 
+
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS houses (
+        id SERIAL PRIMARY KEY,
+        street TEXT NOT NULL,
+        house_area REAL NOT NULL,
+        rooms_count INTEGER NOT NULL,
+        floors_count INTEGER NOT NULL,
+        house_color TEXT,
+        plot_area REAL,
+        has_garage BOOLEAN DEFAULT FALSE,
+        is_renovated BOOLEAN DEFAULT FALSE,
+        extra_info TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS notabug_bugs (
         id SERIAL PRIMARY KEY,
