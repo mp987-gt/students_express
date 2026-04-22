@@ -42,9 +42,12 @@ createTableQueries.push(`
     name TEXT NOT NULL,
     price INT,
     quantity INT
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
     );
+
+    ALTER TABLE product
+    ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+    
+;
   `);
 
 createTableQueries.push(`

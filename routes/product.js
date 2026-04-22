@@ -12,7 +12,7 @@ router.get('/', async function(req, res, next) {
   const rowProduct = product.rows.map(s => {
     return {
       ...s, 
-      //created_at_date: s.created_at.toLocaleDateString()
+      created_at_date: s.created_at.toLocaleDateString()
     }
   })
 
