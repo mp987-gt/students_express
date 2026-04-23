@@ -1,0 +1,33 @@
+<h1>{{title}}</h1>
+<hr>
+<form action="{{#if isEdit}}/artifacts/edit/{{item.id}}{{else}}/artifacts/create{{/if}}" method="POST">
+    <p>
+        <label>Назва артефакту:</label><br>
+        <input type="text" name="name" value="{{item.name}}" required>
+    </p>
+    <p>
+        <label>Аномалія:</label><br>
+        <input type="text" name="origin_anomaly" value="{{item.origin_anomaly}}" required>
+    </p>
+    <p>
+        <label>Рідкість:</label><br>
+        <select name="rarity">
+            <option value="Common" {{#if (eq item.rarity 'Common')}}selected{{/if}}>Звичайний</option>
+            <option value="Rare" {{#if (eq item.rarity 'Rare')}}selected{{/if}}>Рідкісний</option>
+            <option value="Legendary" {{#if (eq item.rarity 'Legendary')}}selected{{/if}}>Легендарний</option>
+        </select>
+    </p>
+    <p>
+        <label>Радіація (mR):</label><br>
+        <input type="number" name="radiation_level" value="{{item.radiation_level}}" step="0.1">
+    </p>
+    <p>
+        <label>Ціна (купони):</label><br>
+        <input type="number" name="market_value" value="{{item.market_value}}">
+    </p>
+    <button type="submit" style="padding: 10px 20px; background: green; color: white; border: none; cursor: pointer;">
+        {{#if isEdit}}Зберегти зміни{{else}}Додати в реєстр{{/if}}
+    </button>
+</form>
+<br>
+<a href="/artifacts/inventory">⬅ Назад до списку</a>

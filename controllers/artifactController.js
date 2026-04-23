@@ -1,4 +1,4 @@
-import pool from '../db/index.js';
+import pool from '../db/connector.js';
 
 // 1. Отримати всі артефакти (READ)
 export const getAllArtifacts = async () => {

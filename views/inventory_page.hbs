@@ -1,14 +1,21 @@
 <h1>📦 Склад артефактів Сидоровича</h1>
 <hr>
-<table border="1" cellpadding="10">
+
+<div style="margin-bottom: 20px;">
+    <a href="/artifacts/create" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+        ➕ Додати новий артефакт
+    </a>
+</div>
+
+<table border="1" cellpadding="10" style="width: 100%; border-collapse: collapse;">
     <thead>
-        <tr>
+        <tr style="background-color: #333; color: white;">
             <th>Назва</th>
             <th>Аномалія</th>
             <th>Рідкість</th>
             <th>Радіація</th>
             <th>Ціна (купони)</th>
-        </tr>
+            <th>Дії</th> </tr>
     </thead>
     <tbody>
         {{#each items}}
@@ -18,9 +25,24 @@
             <td>{{this.rarity}}</td>
             <td>{{this.radiation_level}} mR</td>
             <td>💰 {{this.market_value}}</td>
+            <td>
+                <a href="/artifacts/edit/{{this.id}}" style="color: blue;">Редагувати</a> 
+                | 
+                <form action="/artifacts/delete/{{this.id}}" method="POST" style="display:inline;" onsubmit="return confirm('Викинути цей артефакт в аномалію?')">
+                    <button type="submit" style="color: red; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0;">
+                        Видалити
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{else}}
+        <tr>
+            <td colspan="6" style="text-align: center;">Сталкерів давно не було... Склад порожній.</td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+
 <br>
-<a href="/">Повернутися на головну</a>
+<hr>
+<a href="/">🏠 Повернутися на головну</a>
