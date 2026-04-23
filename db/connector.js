@@ -221,6 +221,20 @@ createTableQueries.push(`
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS clothing (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        brand TEXT,
+        category TEXT NOT NULL, 
+        size TEXT NOT NULL,     
+        color TEXT,
+        price NUMERIC(10,2),
+        material TEXT,
+        stock_quantity INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 
 for await (const query of createTableQueries) {
     try {

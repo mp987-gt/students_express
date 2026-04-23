@@ -1,0 +1,55 @@
+<div class="container">
+    <h1>👕 Каталог одягу</h1>
+    <hr>
+
+    <table border="1" cellpadding="10" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th>Назва</th>
+                <th>Бренд</th>
+                <th>Категорія</th>
+                <th>Розмір</th>
+                <th>Колір</th>
+                <th>Матеріал</th>
+                <th>Ціна</th>
+                <th>Кількість</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each items}}
+            <tr>
+                <td><strong>{{this.name}}</strong></td>
+                <td>{{this.brand}}</td>
+                <td>{{this.category}}</td>
+                <td><span class="badge">{{this.size}}</span></td>
+                <td>{{this.color}}</td>
+                <td>{{this.material}}</td>
+                <td><strong>{{this.price}} грн</strong></td>
+                <td>{{this.stock_quantity}} шт.</td>
+                <td>
+                    <form action="/clothing/delete/{{this.id}}" method="POST" onsubmit="return confirm('Видалити цей товар?')">
+                        <button type="submit" style="color: red; cursor: pointer;">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="9" style="text-align: center;">Склад порожній. Додайте перший товар!</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/">🏠 Повернутися на головну</a>
+</div>
+
+<style>
+    .container { font-family: sans-serif; margin: 20px; }
+    table { margin-top: 20px; }
+    th, td { text-align: left; padding: 12px; border: 1px solid #ddd; }
+    .badge { background: #eee; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    button { background: none; border: 1px solid red; border-radius: 4px; padding: 5px 10px; }
+    button:hover { background: red; color: white !important; }
+</style>
