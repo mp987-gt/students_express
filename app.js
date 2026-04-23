@@ -26,6 +26,7 @@ import barRouter from './routes/bar.js'
 import accountsRouter from './routes/accounts.js'
 import spotifyRouter from './routes/spotify.js';
 import notabugRouter from './routes/notabug.js'
+import artifactRouter from './routes/artifacts.js';
 
 import { fileURLToPath } from 'url';
 
@@ -44,12 +45,15 @@ hbs.registerHelper('eq', function (a, b) {
   return a === b;
 });
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+app.use('/artifacts', artifactRouter);
 app.use('/', indexRouter);
 app.use('/movies', moviesRouter);
 app.use('/students', usersRouter);

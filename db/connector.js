@@ -221,6 +221,21 @@ createTableQueries.push(`
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS artifacts (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        origin_anomaly TEXT NOT NULL,
+        rarity TEXT DEFAULT 'Common',
+        radiation_level NUMERIC(10,2),
+        weight NUMERIC(10,2),
+        market_value INTEGER,
+        is_contained BOOLEAN DEFAULT TRUE,
+        stalker_owner TEXT,
+        properties_notes TEXT,
+        found_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 
 for await (const query of createTableQueries) {
     try {
