@@ -1,16 +1,26 @@
 import db from '../db/connector.js';
 import bcrypt from 'bcrypt';
+import Slonik from '../models/Slonik.js';
 
 const SALT_ROUNDS = 10;
-export async function registerSlonik(username, password, age, place_of_birth) {
+
+export async function registerSlonik(data) {
+  const newSlonik = new Slonik(data);
+  
+  newSlonik.validate();
+
   try {
-    const hash = await bcrypt.hash(password, SALT_ROUNDS);
+    const hash = await bcrypt.hash(newSlonik.password, SALT_ROUNDS);
     const query = `
       INSERT INTO sloniki (username, password_hash, age, place_of_birth)
       VALUES ($1, $2, $3, $4) 
       RETURNING *`;
-    const res = await db.query(query, [username, hash, age, place_of_birth]);
-    
+      const res = await db.query(query, [
+        newSlonik.username, 
+        hash, 
+        newSlonik.age, 
+        newSlonik.place_of_birth
+      ]);    
     console.log(`✓ Slonik registered successfully: @${res.rows[0].username}`);
     return res.rows[0];
   } catch (err) {

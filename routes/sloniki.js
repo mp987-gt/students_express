@@ -16,34 +16,23 @@ router.get('/', async function(req, res, next) {
 });
 
 router.get('/create', async function(req, res, next) {
-  res.render('forms/sloniki/sloniki_form');
-})
+  res.render('forms/sloniki/sloniki_form', { formData: {} });
+});
 
 router.post('/create', async function(req, res, next) {
-   const { username, password, age, place_of_birth } = req.body;
   try {
-    checkUsername(username);
-    checkAge(age);
-    checkPassword(password);
-    checkPlaceOfBirth(place_of_birth);
-    
-    await registerSlonik(username, password, age, place_of_birth);
-    
+    await registerSlonik(req.body);
     res.redirect('/sloniki');
   } catch (err) {
     const errorMessage = err.message
-    // res.status(500).send(`!! Error registering slonik: this slonik: @${username} is already exist`);
-    res.render('forms/sloniki/sloniki_form', {
-      errorUsername: err.field === "username" ? err.message : null,
-      errorAge: err.field === "age" ? err.message : null,
-      errorPassword: err.field === "password" ? err.message : null,
-      errorPlaceOfBirth: err.field === "place_of_birth" ? err.message : null,
 
-      formData: {
-        username,
-        age,
-        place_of_birth
-      }
+    res.render('forms/sloniki/sloniki_form', {
+      errorUsername: (err.field === "username" || err.message.toLowerCase().includes("username")) ? err.message : null,
+      errorAge: (err.field === "age" || err.message.toLowerCase().includes("age")) ? err.message : null,
+      errorPassword: (err.field === "password" || err.message.toLowerCase().includes("password")) ? err.message : null,
+      errorPlaceOfBirth: (err.field === "place_of_birth" || err.message.toLowerCase().includes("birth")) ? err.message : null,
+
+      formData: req.body
     });
   };
 });
