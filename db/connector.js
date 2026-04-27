@@ -41,7 +41,7 @@ createTableQueries.push(`
     barcode TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     price INT,
-    quantity INT
+    quantity INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     );
@@ -252,6 +252,17 @@ createTableQueries.push(`
     );
 `);
 
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS kittens (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,              
+    breed TEXT,        
+    color TEXT,       
+    fur_type TEXT,            
+    energy_level INTEGER,                
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 createTableQueries.push ( `
     CREATE TABLE IF NOT EXISTS president (
     id SERIAL PRIMARY KEY,
