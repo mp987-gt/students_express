@@ -7,24 +7,7 @@ import db from "../db/connector.js";
 // клас CatData -- все що стосується кота
 // ---------------------------------------
 class CatData {
-  /*
-  constructor(data) {
-    this.name = data.name || "Unknown";
-    this.breed = data.breed || "UNknown";
-    this.age = parseInt(data.age_years, 10);
-    this.weight = parseFloat(data.weight_kg);
-    this.favorite_food = data.favorite_food;
-    this.hasMicrochip = data.has_microchip;
-    this.ownerContact = data.owner_contact;
-    this.characterNotes = data.character_notes;
-    this.username = data.owner_name || "Unknown Owner";
-    this.createdAt = data.created_at
-      ? new Date(data.created_at).toLocaleString('uk-UA') 
-      : "Unknown";
-    this.email = data.email;
-    this.password = data.password;
-  }
-    */
+  
   constructor({
     id,
     name,
