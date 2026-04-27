@@ -2,56 +2,71 @@ import express from "express";
 import bcrypt from "bcrypt";
 const router = express.Router();
 import db from "../db/connector.js";
+import baseModule from "hbs";
 
-// ---------------------------------------
-// клас CatData -- все що стосується кота
-// ---------------------------------------
-class CatData {
-  
-  constructor({
-    id,
-    name,
-    breed,
-    age_years,
-    weight_kg,
-    favorite_food,
-    has_microchip,
-    owner_contact,
-    character_notes,
-    owner_name,
-    created_at,
-    email,
-    password,
-  }) {
-    this.id = id;
-    this.name = name || "Unknown";
-    this.breed = breed || "Unknown";
-    this.age = parseInt(age_years, 10) || 0;
-    this.weight = parseFloat(weight_kg) || 0;
-    this.favorite_food = favorite_food;
-    this.hasMicrochip = has_microchip;
-    this.ownerContact = owner_contact;
-    this.characterNotes = character_notes;
+class User {
+  constructor({ owner_name, email, password }) {
     this.username = owner_name || "Unknown Owner";
     this.email = email;
     this.password = password;
-    this.createdAt = created_at
-      ? new Date(created_at).toLocaleString("uk-UA")
+  }
+
+  toJSON() {
+    return {
+      username: this.username,
+      email: this.email
+    };
+  }
+
+  displayUser() {
+    console.log("-----------------------");
+    console.log(`Owner: ${this.username} (${this.email})`);
+  }
+}
+
+class CatData extends User {
+  constructor(data) {
+    super(data);
+
+    this.id = data.id; 
+    this.name = data.name || "Unknown";
+    this.breed = data.breed || "Unknown";
+    this.age = parseInt(data.age_years, 10) || 0;
+    this.weight = parseFloat(data.weight_kg) || 0;
+    this.favorite_food = data.favorite_food;
+    this.hasMicrochip = data.has_microchip;
+    this.ownerContact = data.owner_contact;
+    this.characterNotes = data.character_notes;
+    this.createdAt = data.created_at
+      ? new Date(data.created_at).toLocaleString("uk-UA")
       : "Unknown";
   }
 
+  toJSON(){
+    return {
+      id: this.id,
+      catName: this.name,
+      breed: this.breed,
+      info: {
+        age: this.age,
+        weight: this.weight
+      },
+      owner: super.toJSON() 
+    };
+  }
+
+
   display() {
+    super.displayUser();
     console.log(`\n--- [CAT: ${this.name.toUpperCase()}] ---`);
     console.table({
-      "Id": this.id,
-      "Breed": this.breed,
-      "Age": `${this.age} years`,
-      "Weight": `${this.weight} kg`,
+      Id: this.id,
+      Breed: this.breed,
+      Age: `${this.age} years`,
+      Weight: `${this.weight} kg`,
       "Favorite Food": this.favorite_food,
-      "Microchip": this.hasMicrochip ? "Yes" : "No",
-      "Owner": this.username,
-      "Email": this.email,
-      "Contact": this.ownerContact,
+      Microchip: this.hasMicrochip ? "Yes" : "No",
+      Contact: this.ownerContact,
     });
     console.log("Created at:", this.createdAt);
     console.log("Notes:", this.characterNotes || "No notes provided.");
@@ -90,10 +105,7 @@ const showExistingCats = async () => {
 
 showExistingCats();
 
-// ----------------------------------------
-// клас CatValidator -- валідація всього
-// ----------------------------------------
-class CatValidator {
+class BaseValidator {
   static validateEmail(email) {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email || email.trim().length === 0) return "Email is required";
@@ -112,14 +124,18 @@ class CatValidator {
     return null;
   }
 
-  static  validateUsername(name) {
-  const n = name.trim();
-  if (n.length < 3 || n.length > 30) return "Username must be 3-30 characters";
-  if (!/^[a-zA-Z0-9_-]+$/.test(n))
-    return "Username contains invalid characters";
-  return null;
-};
+  static validateUsername(name) {
+    const n = name.trim();
+    if (n.length < 3 || n.length > 30)
+      return "Username must be 3-30 characters";
+    if (!/^[a-zA-Z0-9_-]+$/.test(n))
+      return "Username contains invalid characters";
+    return null;
+  }
+}
 
+
+class CatValidator extends BaseValidator {
   static validateCatName(name) {
     if (!name || typeof name !== "string") return "Cat name is required";
     const trimmed = name.trim();
@@ -131,7 +147,6 @@ class CatValidator {
     return null;
   }
 
-  
   static validateAge(age) {
     const n = parseInt(age, 10);
     if (age === "" || age === null || age === undefined)
@@ -173,7 +188,6 @@ class CatValidator {
   }
 }
 
-//  Отримвння всіх котів з бази та повертає масив екземплярів CatData
 const allCatsFromDB = async () => {
   const result = await db.query(`
     SELECT cats.*, users_cats.username as owner_name, users_cats.email, users_cats.password
@@ -184,16 +198,9 @@ const allCatsFromDB = async () => {
   return result.rows.map((row) => new CatData(row));
 };
 
-// -------------------------
-// Головна сторінка сайту
-// -------------------------
 router.get("/", function (req, res, next) {
   res.render("cats/cats", { title: "CAT NET." });
 });
-
-// ---------------
-// АВТОРИЗАЦІЯ
-// ---------------
 
 router.get("/register", async (req, res) => {
   res.render("cats/cats-register-form", {
@@ -275,9 +282,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ---------------
-// ІНШІ ФУНКЦІЇ
-// ---------------
 
 router.get("/profile", async (req, res) => {
   const name = req.query.user || "Guest";
@@ -513,3 +517,17 @@ router.get("/view-public", async (req, res) => {
 });
 
 export default router;
+
+const testCat = new CatData({
+  id: 99,
+  name: "Мурчик",
+  owner_name: "Олена",
+  email: "olena@mail.com",
+  password: "SECRET_HASH_123", 
+  age_years: 3,
+  breed: "Вуличний"
+});
+
+console.log("\n--- [JSON TEST] CatData object converted to string: ---");
+console.log(JSON.stringify(testCat, null, 2)); 
+console.log("--------------------------------------\n");
