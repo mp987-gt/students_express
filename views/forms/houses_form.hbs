@@ -13,6 +13,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px; 
         }
 
         .form-card {
@@ -25,6 +26,22 @@
         }
 
         h2 { margin: 0 0 30px 0; font-size: 24px; font-weight: 700; color: #0f172a; text-align: center; }
+
+        
+        .error-banner {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .error-banner ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #b91c1c;
+            font-size: 14px;
+        }
 
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
@@ -85,33 +102,72 @@
 <body>
     <div class="form-card">
         <h2>🏠 {{#if item.id}}Редагування{{else}}Новий об'єкт{{/if}}</h2>
+
+        
+        {{#if errors}}
+        <div class="error-banner">
+            <ul>
+                {{#each errors}}
+                    <li>{{this.msg}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+
         <form action="/houses/{{#if item.id}}edit/{{item.id}}{{else}}add{{/if}}" method="POST">
             <div class="form-group">
                 <label>Вулиця та номер</label>
-                <input type="text" name="street" value="{{item.street}}" required>
+                <input type="text" name="street" value="{{item.street}}" placeholder="напр. вул. Сонячна, 15">
             </div>
+
             <div class="grid">
-                <div class="form-group"><label>Площа (м²)</label><input type="number" step="0.1" name="house_area" value="{{item.house_area}}" required></div>
-                <div class="form-group"><label>Ділянка (сот)</label><input type="number" step="0.1" name="plot_area" value="{{item.plot_area}}"></div>
+                <div class="form-group">
+                    <label>Площа (м²)</label>
+                    <input type="number" step="0.1" name="house_area" value="{{item.house_area}}" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label>Ділянка (сот)</label>
+                    <input type="number" step="0.1" name="plot_area" value="{{item.plot_area}}" placeholder="0.0">
+                </div>
             </div>
+
             <div class="grid">
-                <div class="form-group"><label>Кімнат</label><input type="number" name="rooms_count" value="{{item.rooms_count}}" required></div>
-                <div class="form-group"><label>Поверхів</label><input type="number" name="floors_count" value="{{item.floors_count}}" required></div>
+                <div class="form-group">
+                    <label>Кімнат</label>
+                    <input type="number" name="rooms_count" value="{{item.rooms_count}}" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Поверхів</label>
+                    <input type="number" name="floors_count" value="{{item.floors_count}}" placeholder="1">
+                </div>
             </div>
+
             <div class="form-group">
                 <label>Колір фасаду</label>
-                <input type="text" name="house_color" value="{{item.house_color}}">
+                <input type="text" name="house_color" value="{{item.house_color}}" placeholder="напр. Білий">
             </div>
+
             <div class="checkbox-container">
-                <label class="checkbox-item"><input type="checkbox" name="has_garage" {{#if item.has_garage}}checked{{/if}}> Гараж</label>
-                <label class="checkbox-item"><input type="checkbox" name="is_renovated" {{#if item.is_renovated}}checked{{/if}}> Ремонт</label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="has_garage" {{#if item.has_garage}}checked{{/if}}> 
+                    Гараж
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="is_renovated" {{#if item.is_renovated}}checked{{/if}}> 
+                    Ремонт
+                </label>
             </div>
+
             <div class="form-group">
-                <label>Опис</label>
-                <textarea name="extra_info" rows="3">{{item.extra_info}}</textarea>
+                <label>Додаткова інформація</label>
+                <textarea name="extra_info" rows="3" placeholder="Опишіть особливості...">{{item.extra_info}}</textarea>
             </div>
-            <button type="submit" class="btn-submit">Зберегти об'єкт</button>
-            <a href="/houses" class="back-link">← Назад до списку</a>
+
+            <button type="submit" class="btn-submit">
+                {{#if item.id}}Зберегти зміни{{else}}Створити об'єкт{{/if}}
+            </button>
+            
+            <a href="/houses" class="back-link">← Скасувати та повернутися</a>
         </form>
     </div>
 </body>

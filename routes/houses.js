@@ -1,6 +1,32 @@
 import express from 'express';
-const router = express.Router();
+import { body, validationResult } from 'express-validator'; 
 import db from '../db/connector.js';
+
+const router = express.Router();
+
+
+const houseValidation = [
+    body('street').trim().notEmpty().withMessage('Назва вулиці обов’язкова'),
+    body('house_area').isFloat({ min: 1 }).withMessage('Площа будинку має бути числом більше 0'),
+    body('rooms_count').isInt({ min: 1 }).withMessage('Кількість кімнат має бути цілим числом (мінімум 1)'),
+    body('floors_count').isInt({ min: 1 }).withMessage('Кількість поверхів має бути цілим числом (мінімум 1)'),
+    body('house_color').trim().notEmpty().withMessage('Колір обов’язковий'),
+    body('plot_area').isFloat({ min: 0 }).withMessage('Площа ділянки має бути числом'),
+    body('extra_info').optional({ checkFalsy: true }).trim()
+];
+
+
+const handleValidationErrors = (view) => (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).render(view, { 
+            item: { ...req.body, id: req.params.id }, 
+            errors: errors.array() 
+        });
+    }
+    next();
+};
+
 
 // LIST
 router.get('/', async (req, res) => {
@@ -13,11 +39,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/add', (req, res) => {
-    res.render('forms/houses_form', { item: {} }); 
+    res.render('forms/houses_form', { item: {}, errors: [] }); 
 });
 
 // ADD
-router.post('/add', async (req, res) => {
+router.post('/add', houseValidation, handleValidationErrors('forms/houses_form'), async (req, res) => {
     const { street, house_area, rooms_count, floors_count, house_color, plot_area, has_garage, is_renovated, extra_info } = req.body;
     try {
         await db.query(`
@@ -33,22 +59,17 @@ router.post('/add', async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM houses WHERE id = $1', [req.params.id]);
-        
-        if (result.rows.length === 0) {
-            return res.status(404).send('Будинок не знайдено');
-        }
+        if (result.rows.length === 0) return res.status(404).send('Будинок не знайдено');
 
-        res.render('forms/houses_form', { item: result.rows[0] }); 
-        
+        res.render('forms/houses_form', { item: result.rows[0], errors: [] }); 
     } catch (err) {
-        console.error("Помилка при відкритті форми редагування:", err);
-        res.status(500).send("Помилка: " + err.message);
+        res.status(500).send(err.message);
     }
 });
 
-// UPDATE
-router.post('/edit/:id', async (req, res) => {
-    const { street, house_area, rooms_count, floors_count, house_color, plot_area, has_garage, is_renovated, extra_info } = req.body;
+// UPDATE 
+router.post('/edit/:id', houseValidation, handleValidationErrors('forms/houses_form'), async (req, res) => {
+    const { street, house_area, rooms_count, floors_count, house_color, plot_area, extra_info } = req.body;
     
     try {
         await db.query(`
@@ -71,8 +92,7 @@ router.post('/edit/:id', async (req, res) => {
         );
         res.redirect('/houses');
     } catch (err) { 
-        console.error(err);
-        res.status(500).send("Помилка бази: " + err.message); 
+        res.status(500).send(err.message); 
     }
 });
 
