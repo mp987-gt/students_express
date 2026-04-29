@@ -6,13 +6,11 @@ export const getAllClothing = async () => {
 };
 
 export const addClothingItem = async (data) => {
-    // Тут ми використовуємо 'stock_quantity', як у твоєму connector.js
     const query = `
         INSERT INTO clothing (type, brand, size, price, stock_quantity) 
         VALUES ($1, $2, $3, $4, $5) 
         RETURNING *`;
     
-    // data.stock береться з атрибуту name="stock" у твоїй формі
     const values = [data.type, data.brand, data.size, data.price, data.stock];
     const res = await pool.query(query, values);
     return res.rows[0];
