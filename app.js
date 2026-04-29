@@ -21,8 +21,15 @@ import streetFoodRouter from './routes/street_food.js'
 import heroessRouter from './routes/heroes.js'
 import presidentRouter from './routes/president.js'
 import productRouter from './routes/product.js'
+import batmanRouter from './routes/batman.js'
 import barRouter from './routes/bar.js'
 import accountsRouter from './routes/accounts.js'
+import pesykiRouter from './routes/pesyki.js'
+import brawlerRouter from './routes/brawlstars.js';
+import housesRouter from './routes/houses.js';
+import spotifyRouter from './routes/spotify.js';
+import notabugRouter from './routes/notabug.js'
+import kittensRouter from './routes/kittens.js'
 
 import { fileURLToPath } from 'url';
 
@@ -35,12 +42,20 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+import hbs from 'hbs';
+
+// Реєстрація хелпера для порівняння значень у шаблонах
+hbs.registerHelper('eq', function (a, b) {
+  return String(a) === String(b);
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Маршрути
 app.use('/', indexRouter);
 app.use('/movies', moviesRouter);
 app.use('/students', usersRouter);
@@ -55,32 +70,30 @@ app.use('/gym2', gymRouter);
 app.use('/dhd', dhdRouter);
 app.use('/street_food', streetFoodRouter);
 app.use('/product', productRouter);
+app.use('/villains', batmanRouter);
 app.use('/bar', barRouter);
 app.use('/accounts', accountsRouter);
+app.use('/pesyki', pesykiRouter);
+app.use('/brawlers', brawlerRouter);
+
+app.use('/houses', housesRouter);
+app.use('/spotify', spotifyRouter);
+app.use('/notabug', notabugRouter);
+app.use('/kittens', kittensRouter);
+app.use('/president',presidentRouter);
 
 app.use((err, req, res, next) => {
-  console.error('Global error caught:', err || 'Unknown error');
-
-  res.status(500).render('error', { 
-    message: 'Something went wrong',
-    error: process.env.NODE_ENV === 'development' ? err : {} 
+  console.error(err.stack); 
+  res.status(err.status || 500);
+  res.render('error', { 
+    message: err.message,
+    error: err 
   });
 });
 
 // catch 404 and forward to error handler
-
 app.use(function (req, res, next) {
   next(createError(404));
-});
-
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  res.status(err.status || 500);
-  res.render('error');
 });
 
 export default app;

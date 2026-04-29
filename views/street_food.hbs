@@ -14,7 +14,7 @@
 
             {{#if isForm}}
             <div class="form-container">
-                <div style="margin-bottom: 20px;">
+                <div class="page-back">
                     <a href="/street_food" class="btn btn-primary">GO BACK</a>
                 </div>
 
@@ -26,38 +26,80 @@
                     </div>
 
                     {{#if formError}}
-                    <p class="field-error" style="margin-bottom: 16px;">{{formError}}</p>
+                    <p class="field-error form-error">{{formError}}</p>
                     {{/if}}
 
                     <form action="{{action}}" method="POST" class="food-form" novalidate>
                         <div class="form-grid">
                             <label>
                                 Food name
-                                <input type="text" name="food_name" value="{{item.food_name}}" required>
+                                <input
+                                    type="text"
+                                    name="food_name"
+                                    value="{{item.food_name}}"
+                                    required
+                                >
                             </label>
 
                             <label class="country-field">
                                 Country
                                 <div class="country-select">
-                                    <input type="text" id="countryInput" name="country" value="{{item.country}}"
-                                        autocomplete="off" required placeholder="Start typing country...">
+                                    <input
+                                        type="text"
+                                        id="countryInput"
+                                        name="country"
+                                        value="{{item.country}}"
+                                        autocomplete="off"
+                                        required
+                                        placeholder="Start typing country..."
+                                    >
                                     <div class="country-dropdown" id="countryDropdown"></div>
                                 </div>
                             </label>
 
                             <label>
                                 Spicy level
-                                <input type="number" name="spicy_level" min="0" max="10" value="{{item.spicy_level}}">
+                                <input
+                                    type="number"
+                                    name="spicy_level"
+                                    min="0"
+                                    max="10"
+                                    value="{{item.spicy_level}}"
+                                    class="{{#if fieldErrors.spicy_level}}error{{/if}}"
+                                >
+                                {{#if fieldErrors.spicy_level}}
+                                <span class="field-error">{{fieldErrors.spicy_level}}</span>
+                                {{/if}}
                             </label>
 
                             <label>
                                 Price
-                                <input type="number" name="price" min="0" step="0.01" value="{{item.price}}">
+                                <input
+                                    type="number"
+                                    name="price"
+                                    min="0.01"
+                                    step="0.01"
+                                    value="{{item.price}}"
+                                    class="{{#if fieldErrors.price}}error{{/if}}"
+                                >
+                                {{#if fieldErrors.price}}
+                                <span class="field-error">{{fieldErrors.price}}</span>
+                                {{/if}}
                             </label>
 
                             <label>
                                 Rating
-                                <input type="number" name="rating" min="1" max="10" value="{{item.rating}}">
+                                <input
+                                    type="number"
+                                    name="rating"
+                                    min="1"
+                                    max="10"
+                                    value="{{item.rating}}"
+                                    class="{{#if fieldErrors.rating}}error{{/if}}"
+                            >
+                            {{#if fieldErrors.rating}}
+                            <span class="field-error">{{fieldErrors.rating}}</span>
+                            {{/if}}
                             </label>
                         </div>
 
@@ -71,93 +113,93 @@
 
             <script>
                 (() => {
-                    const countries = {{{ countries }}};
-                const countryInput = document.getElementById('countryInput');
-                const countryDropdown = document.getElementById('countryDropdown');
+                    const countries = {{{countries}}};
+                    const countryInput = document.getElementById('countryInput');
+                    const countryDropdown = document.getElementById('countryDropdown');
 
-                if (!countryInput || !countryDropdown || !Array.isArray(countries)) {
-                    return;
-                }
-
-                function escapeHtml(value) {
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#39;');
-                }
-
-                function renderDropdown(list) {
-                    if (!list.length) {
-                        countryDropdown.innerHTML = '<div class="country-option empty">No matches found</div>';
-                        countryDropdown.classList.add('show');
+                    if (!countryInput || !countryDropdown || !Array.isArray(countries)) {
                         return;
                     }
 
-                    countryDropdown.innerHTML = list
-                        .slice(0, 8)
-                        .map((country) => {
-                            return `<button type="button" class="country-option" data-value="${escapeHtml(country)}">${escapeHtml(country)}</button>`;
-                        })
-                        .join('');
-
-                    countryDropdown.classList.add('show');
-                }
-
-                function filterCountries(query) {
-                    const normalized = query.trim().toLowerCase();
-
-                    if (!normalized) {
-                        return countries.slice(0, 8);
+                    function escapeHtml(value) {
+                        return String(value)
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/'/g, '&#39;');
                     }
 
-                    return countries.filter((country) =>
-                        country.toLowerCase().includes(normalized)
-                    );
-                }
+                    function renderDropdown(list) {
+                        if (!list.length) {
+                            countryDropdown.innerHTML = '<div class="country-option empty">No matches found</div>';
+                            countryDropdown.classList.add('show');
+                            return;
+                        }
 
-                function openDropdown() {
-                    renderDropdown(filterCountries(countryInput.value));
-                }
+                        countryDropdown.innerHTML = list
+                            .slice(0, 8)
+                            .map((country) => {
+                                return `<button type="button" class="country-option" data-value="${escapeHtml(country)}">${escapeHtml(country)}</button>`;
+                            })
+                            .join('');
 
-                function closeDropdown() {
-                    countryDropdown.classList.remove('show');
-                }
+                        countryDropdown.classList.add('show');
+                    }
 
-                countryInput.addEventListener('focus', openDropdown);
+                    function filterCountries(query) {
+                        const normalized = query.trim().toLowerCase();
 
-                countryInput.addEventListener('input', () => {
-                    renderDropdown(filterCountries(countryInput.value));
-                });
+                        if (!normalized) {
+                            return countries.slice(0, 8);
+                        }
 
-                countryDropdown.addEventListener('click', (event) => {
-                    const option = event.target.closest('.country-option[data-value]');
-                    if (!option) return;
+                        return countries.filter((country) =>
+                            country.toLowerCase().includes(normalized)
+                        );
+                    }
 
-                    countryInput.value = option.dataset.value;
-                    closeDropdown();
-                    countryInput.focus();
-                });
+                    function openDropdown() {
+                        renderDropdown(filterCountries(countryInput.value));
+                    }
 
-                document.addEventListener('click', (event) => {
-                    const insideCountrySelect = event.target.closest('.country-select');
-                    if (!insideCountrySelect) {
+                    function closeDropdown() {
+                        countryDropdown.classList.remove('show');
+                    }
+
+                    countryInput.addEventListener('focus', openDropdown);
+
+                    countryInput.addEventListener('input', () => {
+                        renderDropdown(filterCountries(countryInput.value));
+                    });
+
+                    countryDropdown.addEventListener('click', (event) => {
+                        const option = event.target.closest('.country-option[data-value]');
+                        if (!option) return;
+
+                        countryInput.value = option.dataset.value;
                         closeDropdown();
-                    }
-                });
+                        countryInput.focus();
+                    });
 
-                countryInput.addEventListener('keydown', (event) => {
-                    if (event.key === 'Escape') {
-                        closeDropdown();
-                    }
-                });
-                }) ();
+                    document.addEventListener('click', (event) => {
+                        const insideCountrySelect = event.target.closest('.country-select');
+                        if (!insideCountrySelect) {
+                            closeDropdown();
+                        }
+                    });
+
+                    countryInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Escape') {
+                            closeDropdown();
+                        }
+                    });
+                })();
             </script>
 
             {{else}}
 
-            <div style="margin-bottom: 20px;">
+            <div class="page-back">
                 <a href="/" class="btn btn-primary">GO BACK</a>
             </div>
 
@@ -178,8 +220,8 @@
                             <th>ID</th>
                             <th>Food name</th>
                             <th>Country</th>
-                            <th>Spicy</th>
                             <th>Price</th>
+                            <th>Spicy</th>
                             <th>Rating</th>
                             <th>Date</th>
                             <th class="actions-head">Actions</th>
@@ -190,19 +232,23 @@
                         {{#if food.length}}
                         {{#each food}}
                         <tr>
-                            <td class="muted">{{id}}</td>
-                            <td class="food-name">{{food_name}}</td>
-                            <td>{{country}}</td>
-                            <td>{{spicy_level}}</td>
-                            <td>${{price}}</td>
-                            <td>{{rating}}</td>
-                            <td>{{created_at}}</td>
-                            <td>
+                            <td class="muted" data-label="ID">{{id}}</td>
+                            <td class="food-name" data-label="Food name">{{food_name}}</td>
+                            <td data-label="Country">{{country}}</td>
+                            <td data-label="Price">{{formatted_price}}</td>
+                            <td data-label="Spicy"><span class="badge badge-spicy">{{spicy_level}}</span></td>
+                            <td data-label="Rating"><span class="badge badge-rating">{{rating}}</span></td>
+                            <td class="date-cell" data-label="Date">{{formatted_created_at}}</td>
+                            <td class="actions-cell" data-label="Actions">
                                 <div class="row-actions">
                                     <a href="/street_food/edit/{{id}}" class="btn btn-edit">Edit</a>
 
-                                    <form action="/street_food/delete/{{id}}" method="POST"
-                                        class="inline-form delete-form" data-food-name="{{food_name}}">
+                                    <form
+                                        action="/street_food/delete/{{id}}"
+                                        method="POST"
+                                        class="inline-form delete-form"
+                                        data-food-name="{{food_name}}"
+                                    >
                                         <button type="button" class="btn btn-delete open-delete-modal">
                                             Delete
                                         </button>

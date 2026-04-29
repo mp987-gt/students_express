@@ -8,13 +8,28 @@ const pool = new Pool({
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+    port: process.env.DB_PORT,   
     ssl: {
         rejectUnauthorized: false
     }
 });
 
 const createTableQueries = [];
+
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS brawl_stars_heroes (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,              
+        rarity TEXT NOT NULL,        
+        class TEXT,       
+        health INTEGER DEFAULT 0,
+        damage INTEGER DEFAULT 0,                                   
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS heroes (
         id SERIAL PRIMARY KEY,
@@ -25,6 +40,7 @@ createTableQueries.push(`
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
+
 createTableQueries.push(`
  CREATE TABLE IF NOT EXISTS sloniki (
     id SERIAL PRIMARY KEY,
@@ -34,7 +50,8 @@ createTableQueries.push(`
     place_of_birth TEXT NOT NULL,           
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
-      `);
+`);
+
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS product (
     id SERIAL PRIMARY KEY,
@@ -43,7 +60,46 @@ createTableQueries.push(`
     price INT,
     quantity INT
     );
+
+    ALTER TABLE product
+    ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
   `);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS pesyki (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      breed TEXT NOT NULL,
+      age INTEGER NOT NULL,
+      vaccinated BOOLEAN DEFAULT FALSE,
+      shelter TEXT NOT NULL,
+      photo TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  createTableQueries.push(`
+  CREATE TABLE IF NOT EXISTS street_food_users (
+        id SERIAL PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS street_food (
+        id SERIAL PRIMARY KEY,
+        food_name TEXT NOT NULL,
+        country TEXT NOT NULL,
+        spicy_level INTEGER CHECK (spicy_level BETWEEN 0 AND 10),
+        price NUMERIC(6,2) CHECK (price >= 0.01),
+        rating INTEGER CHECK (rating BETWEEN 1 AND 10),
+        image_url TEXT,
+        user_id INTEGER REFERENCES street_food_users(id) ON DELETE SET NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 
 createTableQueries.push(`
  CREATE TABLE IF NOT EXISTS deadSpace (
@@ -55,7 +111,8 @@ createTableQueries.push(`
     additional_info TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
    );
-  `);
+`);
+
 createTableQueries.push(`
         CREATE TABLE IF NOT EXISTS cars (
         id SERIAL PRIMARY KEY,
@@ -69,7 +126,8 @@ createTableQueries.push(`
         is_available BOOLEAN DEFAULT TRUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-        `);
+`);
+
 createTableQueries.push(`
  CREATE TABLE IF NOT EXISTS desperate_housewives_1 (
     id SERIAL PRIMARY KEY,
@@ -80,7 +138,7 @@ createTableQueries.push(`
     character_notes TEXT,             
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
-  `);  
+`);  
 
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS accounts(
@@ -90,7 +148,8 @@ createTableQueries.push(`
     password TEXT NOT NULL,
     adding_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-    `);
+`);
+
 createTableQueries.push(`
  CREATE TABLE IF NOT EXISTS games_info (
     id SERIAL PRIMARY KEY,
@@ -100,16 +159,161 @@ createTableQueries.push(`
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 `);
-   
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS users_cats (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) NOT NULL,           
+        email VARCHAR(255) UNIQUE NOT NULL,      
+        password VARCHAR(255) NOT NULL,          
+        created_at TIMESTAMP DEFAULT NOW(),     
+        is_active BOOLEAN DEFAULT TRUE          
+    );
+`);
+
+createTableQueries.push(`
+  CREATE TABLE IF NOT EXISTS gotham_villains (
+    id SERIAL PRIMARY KEY,
+    villain_name TEXT NOT NULL,
+    location TEXT,
+    threat_level INTEGER,
+    status TEXT,
+    spotted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS cats (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        breed VARCHAR(100),
+        age_years INTEGER,
+        weight_kg DECIMAL(5, 2),
+        favorite_food VARCHAR(255),
+        has_microchip BOOLEAN DEFAULT FALSE,
+        owner_contact VARCHAR(255),
+        character_notes TEXT,
+        created_at TIMESTAMP DEFAULT NOW(),
+        user_id INTEGER NOT NULL,
+        CONSTRAINT fk_user_cats
+            FOREIGN KEY (user_id) 
+            REFERENCES users_cats(id) 
+            ON DELETE CASCADE
+    );
+`);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS songs (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        artist VARCHAR(255) NOT NULL,
+        genre VARCHAR(100),
+        duration VARCHAR(50),
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+`);
+ 
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS heroes_mlbb (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,              
+    hero_class TEXT,        
+    role TEXT,       
+    attack_type TEXT,                                   
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS houses (
+        id SERIAL PRIMARY KEY,
+        street TEXT NOT NULL,
+        house_area REAL NOT NULL,
+        rooms_count INTEGER NOT NULL,
+        floors_count INTEGER NOT NULL,
+        house_color TEXT,
+        plot_area REAL,
+        has_garage BOOLEAN DEFAULT FALSE,
+        is_renovated BOOLEAN DEFAULT FALSE,
+        extra_info TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS notabug_bugs (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        severity TEXT NOT NULL DEFAULT 'medium',
+        chaos_level INTEGER DEFAULT 20,
+        status TEXT NOT NULL DEFAULT 'open',
+        claimed_by TEXT,
+        bounty INTEGER,
+        steps_to_reproduce TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS notabug_users (
+        id SERIAL PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        email TEXT,
+        sanity INTEGER DEFAULT 100,
+        reputation INTEGER DEFAULT 0,
+        balance INTEGER DEFAULT 0,
+        is_active BOOLEAN DEFAULT TRUE,
+        bugs_fixed INTEGER DEFAULT 0,
+        bugs_failed INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS notabug_mutations (
+        id SERIAL PRIMARY KEY,
+        bug_id INTEGER NOT NULL REFERENCES notabug_bugs(id) ON DELETE CASCADE,
+        description TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS notabug_feed (
+        id SERIAL PRIMARY KEY,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS kittens (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,              
+    breed TEXT,        
+    color TEXT,       
+    fur_type TEXT,            
+    energy_level INTEGER,                
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+createTableQueries.push ( `
+    CREATE TABLE IF NOT EXISTS president (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INT,
+    country TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+   `);
+
 for await (const query of createTableQueries) {
     try {
-        console.log(query.slice(0, query.indexOf('(')).trim()+"...")
+        console.log(query.slice(0, query.indexOf('(')).trim() + "...")
         await pool.query(query);
-    } catch(err) {
-        console.error("query execution error: ", err.message);
+    } catch (err) {
+        console.error("Query execution error: ", err.message);
     }
 }
 
-console.log("CONNECTED!!!!!✅ ")
+console.log("CONNECTED!!!!!✅ ");
       
 export default pool;
