@@ -1,0 +1,154 @@
+<style>
+  body {
+    background-color: #fc85bc;
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .main-container {
+    background: rgba(250, 159, 209, 0.884);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 95%;
+    max-width: 900px;
+    margin: 20px auto;
+  }
+
+  .btn-pink {
+    background-color: rgb(233, 75, 167);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    margin-bottom: 20px;
+    color: #fff !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  .btn-pink:hover {
+    background-color: rgb(220, 110, 180);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  th, td {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    color: #d63384;
+    font-weight: bold;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ffb3d9;
+  }
+</style>
+
+{{#if mode}}
+<div class="main-container">
+  <h2>{{pageTitle}}</h2>
+
+  <form action="{{action}}" method="POST">
+    <div class="form-group">
+      <label>Name:</label>
+      <input type="text" name="name" value="{{item.name}}" required>
+    </div>
+
+    <div class="form-group">
+      <label>Variety:</label>
+      <input type="text" name="variety" value="{{item.variety}}">
+    </div>
+
+    <div class="form-group">
+      <label>Color:</label>
+      <input type="text" name="color" value="{{item.color}}">
+    </div>
+
+    <div class="form-group">
+      <label>Weight (grams):</label>
+      <input type="number" name="weight_grams" value="{{item.weight_grams}}">
+    </div>
+
+    <div class="form-group">
+      <label>Sweetness (1-10):</label>
+      <input type="number" name="sweetness_level" value="{{item.sweetness_level}}">
+    </div>
+
+    <div class="form-group">
+      <label>Price per kg:</label>
+      <input type="number" step="0.01" name="price_per_kg" value="{{item.price_per_kg}}">
+    </div>
+
+    <div style="margin-top: 20px;">
+      <button type="submit" class="btn-pink" style="width:100%;">SAVE</button>
+      <a href="/pomidores" class="btn-pink" style="width:100%; background:#ffb3d9; color:#d63384 !important; text-align:center;">CANCEL</a>
+    </div>
+  </form>
+</div>
+
+{{else}}
+<div class="main-container">
+  <a href="/" class="btn-pink">BACK</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Variety</th>
+        <th>Color</th>
+        <th>Weight</th>
+        <th>Sweetness</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each pomidores}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.variety}}</td>
+        <td>{{this.color}}</td>
+        <td>{{this.weight_grams}}</td>
+        <td>{{this.sweetness_level}}</td>
+        <td>{{this.price_per_kg}}</td>
+
+        <td>
+          <a href="/pomidores/edit/{{this.id}}" class="btn-pink">EDIT</a>
+          <a href="/pomidores/delete/{{this.id}}" class="btn-pink" onclick="return confirm('Delete?')">DELETE</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <a href="/pomidores/create" class="btn-pink">Add Tomato</a>
+</div>
+{{/if}}

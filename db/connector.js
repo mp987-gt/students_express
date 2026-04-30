@@ -15,6 +15,33 @@ const pool = new Pool({
 });
 
 const createTableQueries = [];
+
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS brawl_stars_heroes (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,              
+        rarity TEXT NOT NULL,        
+        class TEXT,       
+        health INTEGER DEFAULT 0,
+        damage INTEGER DEFAULT 0,                                   
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS movies (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        director TEXT NOT NULL,
+        release_year INTEGER NOT NULL,
+        rating NUMERIC(3,1),
+        genre TEXT,
+        status TEXT,
+        poster_url TEXT,
+    );
+`);
+
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS heroes (
         id SERIAL PRIMARY KEY,
@@ -299,6 +326,33 @@ createTableQueries.push ( `
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
    `);
+
+createTableQueries.push (`
+    CREATE TABLE IF NOT EXISTS turtles (
+  id SERIAL PRIMARY KEY,
+  name_of_turtle TEXT UNIQUE NOT NULL,
+  species TEXT NOT NULL,
+  habitat TEXT NOT NULL,
+  average_lifespan TEXT NOT NULL,
+  diet TEXT NOT NULL,
+  additional_info TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`)
+
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS pomidores (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        variety TEXT,
+        color TEXT,
+        weight_grams INTEGER,
+        sweetness_level INTEGER CHECK (sweetness_level BETWEEN 1 AND 10),
+        is_organic BOOLEAN DEFAULT FALSE,
+        country_of_origin TEXT,
+        price_per_kg NUMERIC(6,2),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
 
 for await (const query of createTableQueries) {
     try {

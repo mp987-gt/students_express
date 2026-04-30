@@ -14,6 +14,110 @@ router.get("/", async function (req, res, next) {
   res.render("accounts", { accounts: rowAccounts || [] });
 });
 
+
+
+// CLASSES
+class Accounts {
+  constructor ({
+    id,
+    user_name,
+    email,
+    password,
+    adding_time
+  }) {
+    this.id = id;
+    this.user_name = user_name || Unknown;
+    this.email = email;
+    this.password = password;
+    this.adding_time = adding_time
+      ? new Date(adding_time).toLocaleString("uk-UA")
+      : "Unknown";
+  }
+
+   display() {
+    console.log(`\n--- [account: ${this.user_name}] ---`);
+    console.table({
+      "Id": this.id,
+      "Username": this.user_name,
+      "Email": this.email,
+      "password": this.password,
+    });
+    console.log("Added at:", this.adding_time);
+    console.log("-----------------------");
+  }
+};
+
+
+class Validator {
+    static verUsername(user_name) {
+        if (!user_name || typeof user_name !== 'string') {
+            return "Username required!";
+  }
+}
+    static  verEmail(email) {
+      if (!reason || typeof email !== 'string') {
+        return "Reason is required";
+  }};
+
+    static verPassword(password) {
+        if (!/[A-Z]/.test(password)){
+            return "Uppercase letter required!"
+        }
+        if (!/[0-9]/.test(password)){
+            return "At least 1 number required!"
+        }
+        return null;
+    }
+};
+
+const watchAccounts = async () => {
+  try {
+    const result = await db.query(`
+      SELECT 
+        id,
+        email, 
+        user_name, 
+        password,
+        adding_time 
+      FROM accounts
+    `);
+
+    if (result.rows.length === 0) {
+      console.log("\n[DATABASE] OMG where`s your table?");
+    } else {
+      console.log(`\n[DATABASE] YEEEY, watch accounts below! Now there are ${result.rows.length} of them:`);
+
+      result.rows.forEach((row) => {
+        const account = new Accounts(row); 
+        account.display();
+      });
+    }
+  } catch (err) {
+    console.error(
+      "\n[ERROR] data error",
+      err.message,
+    );
+  }
+};
+
+watchAccounts();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ADD
 router.get("/createAccount", async function (req, res, next) {
   res.render("forms/accounts_form", {
