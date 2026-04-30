@@ -148,7 +148,7 @@ createTableQueries.push(`
   );
   `);
 createTableQueries.push(`
-    CREATE TABLE IF NOT EXISTS cats (
+    CREATE TABLE IF NOT EXISTS cats ( 
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         breed VARCHAR(100),
