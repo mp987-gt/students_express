@@ -13,12 +13,9 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
-
-
-
-
-
 
         .form-card {
             background: white;
@@ -30,6 +27,23 @@
         }
 
         h2 { margin: 0 0 30px 0; font-size: 24px; font-weight: 700; color: #0f172a; text-align: center; }
+
+        .error-box {
+            background-color: #fef2f2;
+            border: 1px solid #f87171;
+            color: #b91c1c;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .error-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .error-box li { margin-bottom: 5px; }
+        .error-box li:last-child { margin-bottom: 0; }
 
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
@@ -90,6 +104,17 @@
 <body>
     <div class="form-card">
         <h2>🏠 {{#if item.id}}Редагування{{else}}Новий об'єкт{{/if}}</h2>
+
+        {{#if errors}}
+        <div class="error-box">
+            <ul>
+                {{#each errors}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+
         <form action="/houses/{{#if item.id}}edit/{{item.id}}{{else}}add{{/if}}" method="POST">
             <div class="form-group">
                 <label>Вулиця та номер</label>

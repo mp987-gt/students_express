@@ -1,144 +1,219 @@
 <style>
-    body { 
-        background: #0b0e14; 
-        color: white; 
-        font-family: 'Segoe UI', Roboto, sans-serif; 
-        margin: 0; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        min-height: 100vh; 
-    }
-    
-    .layout-wrapper { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 60px; 
-        align-items: center; 
-        max-width: 1000px; 
-        width: 100%; 
-        padding: 40px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background: #0b0e14;
+        color: white;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .form-container { 
-        background: #1a1d24; 
-        padding: 40px; 
-        border-radius: 24px; 
-        border: 1px solid #333; 
-        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-    }
-    
-    h2 { color: #1DB954; text-align: center; margin-bottom: 30px; font-size: 1.8rem; }
-    label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
-
-    input { 
-        width: 100%; padding: 14px; margin-bottom: 25px; 
-        background: #242832; border: 2px solid transparent; 
-        color: white; border-radius: 12px; box-sizing: border-box; 
-        font-size: 1rem; transition: 0.3s; 
+    .card {
+        background: #141720;
+        border: 1px solid #222;
+        border-radius: 20px;
+        padding: 44px 40px 36px;
+        width: 100%;
+        max-width: 440px;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.6);
     }
 
-    input:focus { border-color: #007bbd; outline: none; background: #2a2f3a; }
-    
-    .btn-save { 
-        width: 100%; padding: 16px; background: #007bbd; 
-        color: white; border: none; border-radius: 12px; 
-        font-weight: bold; font-size: 1.1rem; cursor: pointer; 
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    .art-container { position: relative; display: flex; justify-content: center; align-items: center; }
-
-    .vinyl-record {
-        width: 300px; height: 300px;
-        background: radial-gradient(circle, #111 30%, #222 31%, #111 32%, #222 50%, #111 70%);
-        border-radius: 50%; border: 5px solid #111;
-        box-shadow: 0 0 40px rgba(0,0,0,0.8);
-        display: flex; justify-content: center; align-items: center;
-        animation: rotate 15s linear infinite;
-    }
-
-    .vinyl-label {
-        width: 100px; height: 100px; background: #1DB954;
-        border-radius: 50%; display: flex; flex-direction: column;
-        justify-content: center; align-items: center; color: black;
-        font-weight: bold; font-size: 10px; border: 4px solid #0b0e14;
-    }
-
-    .info-card {
-        position: absolute; bottom: -20px; right: -10px;
-        background: rgba(20, 24, 30, 0.7); 
-        backdrop-filter: blur(20px);
-        padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-        width: 260px; box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-    }
-
-    .preview-label { 
-        color: #1DB954; 
-        font-size: 11px; 
-        font-weight: 800; 
-        letter-spacing: 2px; 
-        margin-bottom: 15px; 
+    h2::before {
+        content: '';
         display: inline-block;
-        background: rgba(0, 0, 0, 0.4); 
-        padding: 4px 10px;
-        border-radius: 6px;
-        text-shadow: 0 0 8px rgba(29, 185, 84, 0.6);
+        width: 6px;
+        height: 22px;
+        background: #1DB954;
+        border-radius: 3px;
     }
 //.
 
-    .preview-title { font-size: 1.4rem; font-weight: bold; margin: 0; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .preview-artist { font-size: 1rem; color: #aaa; margin: 5px 0 0; }
-    
-    .preview-meta { 
-        display: flex; justify-content: space-between; 
-        margin-top: 15px; font-size: 0.8rem; color: #666; 
-        font-family: monospace; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; 
+    .field { margin-bottom: 20px; }
+
+    label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 8px;
     }
 
-    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .cancel-link { display: block; text-align: center; margin-top: 20px; color: #555; text-decoration: none; }
+    input {
+        display: block;
+        width: 100%;
+        padding: 13px 16px;
+        background: #1a1d24;
+        border: 1.5px solid #252830;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, background 0.2s;
+        outline: none;
+    }
+
+    input::placeholder { color: #3a3f4a; }
+    input:focus { border-color: #1DB954; background: #1e2129; }
+    input.error { border-color: #e05252; }
+
+    .field-error {
+        font-size: 11px;
+        color: #e05252;
+        margin-top: 6px;
+        display: none;
+    }
+    .field-error.visible { display: block; }
+
+    .actions {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 14px;
+        background: #1DB954;
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-save:hover { background: #1ed760; }
+    .btn-save:active { transform: scale(0.98); }
+
+    .btn-cancel {
+        width: 100%;
+        padding: 13px;
+        background: transparent;
+        color: #555;
+        border: 1.5px solid #252830;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        transition: border-color 0.2s, color 0.2s;
+        display: block;
+    }
+
+    .btn-cancel:hover { border-color: #444; color: #aaa; }
 </style>
 
-<div class="layout-wrapper">
-    <div class="form-container">
-        <h2>{{#if isUpdate}}Edit Track{{else}}New Track{{/if}}</h2>
-        
-        <form action="{{#if isUpdate}}/spotify/update/{{item.id}}{{else}}/spotify/create{{/if}}" method="POST">
-            <label>Title</label>
-            <input type="text" name="title" value="{{item.title}}" required 
-                oninput="document.getElementById('p-title').innerText = this.value || 'Track Name'">
-            
-            <label>Artist</label>
-            <input type="text" name="artist" value="{{item.artist}}" required 
-                oninput="document.getElementById('p-artist').innerText = this.value || 'Artist'">
-            
-            <label>Genre</label>
-            <input type="text" name="genre" value="{{item.genre}}" 
-                oninput="document.getElementById('p-genre').innerText = this.value || 'Genre'">
-            
-            <label>Duration</label>
-            <input type="text" name="duration" value="{{item.duration}}" placeholder="наприклад: 3:45"
-                oninput="this.value = this.value.replace(/[^0-9:;]/g, ''); document.getElementById('p-dur').innerText = this.value || '000'">
+<div class="card">
+    <h2>{{#if isUpdate}}Edit Track{{else}}New Track{{/if}}</h2>
 
-            <button type="submit" class="btn-save">Save Changes</button>
-            <a href="/spotify" class="cancel-link">Cancel</a>
-        </form>
-    </div>
-
-    <div class="art-container">
-        <div class="vinyl-record">
-            <div class="vinyl-label"><span>SPOTIFY</span></div>
+    <form
+        id="song-form"
+        action="{{#if isUpdate}}/spotify/update/{{item.id}}{{else}}/spotify/create{{/if}}"
+        method="POST"
+        novalidate
+    >
+        <div class="field">
+            <label for="title">Title</label>
+            <input id="title" type="text" name="title" value="{{item.title}}" maxlength="200">
+            <span class="field-error" id="err-title">Title is required (max 200 characters)</span>
         </div>
 
-        <div class="info-card">
-            <span class="preview-label">PREVIEW</span>
-            <p id="p-title" class="preview-title">{{#if item.title}}{{item.title}}{{else}}Track Name{{/if}}</p>
-            <p id="p-artist" class="preview-artist">{{#if item.artist}}{{item.artist}}{{else}}Artist{{/if}}</p>
-            
-            <div class="preview-meta">
-                <span id="p-genre">{{#if item.genre}}{{item.genre}}{{else}}Genre{{/if}}</span>
-                <span><span id="p-dur">{{#if item.duration}}{{item.duration}}{{else}}000{{/if}}</span> ms</span>
-            </div>
+        <div class="field">
+            <label for="artist">Artist</label>
+            <input id="artist" type="text" name="artist" value="{{item.artist}}" maxlength="200">
+            <span class="field-error" id="err-artist">Artist is required (max 200 characters)</span>
         </div>
-    </div>
+
+        <div class="field">
+            <label for="genre">Genre</label>
+            <input id="genre" type="text" name="genre" value="{{item.genre}}" maxlength="100">
+            <span class="field-error" id="err-genre">Genre is required (max 100 characters)</span>
+        </div>
+
+        <div class="field">
+            <label for="duration">Duration</label>
+            <input id="duration" type="text" name="duration" value="{{item.duration}}" maxlength="5" inputmode="numeric">
+            <span class="field-error" id="err-duration">Enter duration in seconds</span>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn-save">
+                {{#if isUpdate}}Save Changes{{else}}Add Track{{/if}}
+            </button>
+            <a href="/spotify" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
 </div>
+
+<script>
+    const form = document.getElementById('song-form');
+    const durInput = document.getElementById('duration');
+
+    durInput.addEventListener('keydown', (e) => {
+        const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+        if (allowed.includes(e.key)) return;
+        if (!/^[0-9]$/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    durInput.addEventListener('input', () => {
+        durInput.value = durInput.value.replace(/[^0-9]/g, '');
+    });
+
+    function validateDuration(val) {
+        return /^\d+$/.test(val.trim()) && val.trim().length > 0;
+    }
+
+    function showError(inputId, errId, condition) {
+        const input = document.getElementById(inputId);
+        const err   = document.getElementById(errId);
+        if (condition) {
+            input.classList.add('error');
+            err.classList.add('visible');
+            return false;
+        }
+        input.classList.remove('error');
+        err.classList.remove('visible');
+        return true;
+    }
+
+    form.addEventListener('submit', (e) => {
+        const title    = document.getElementById('title').value;
+        const artist   = document.getElementById('artist').value;
+        const genre    = document.getElementById('genre').value;
+        const duration = document.getElementById('duration').value;
+
+        const ok = [
+            showError('title',    'err-title',    !title.trim()    || title.trim().length > 200),
+            showError('artist',   'err-artist',   !artist.trim()   || artist.trim().length > 200),
+            showError('genre',    'err-genre',    !genre.trim()    || genre.trim().length > 100),
+            showError('duration', 'err-duration', !validateDuration(duration)),
+        ].every(Boolean);
+
+        if (!ok) e.preventDefault();
+    });
+
+    ['title', 'artist', 'genre', 'duration'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+            document.getElementById(id).classList.remove('error');
+            document.getElementById('err-' + id).classList.remove('visible');
+        });
+    });
+</script>
