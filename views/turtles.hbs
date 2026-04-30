@@ -1,0 +1,28 @@
+<div class="main-container">
+  <h1>🐢 Turtles</h1>
+
+  <a href="/turtles/createTurtle" class="btn-pink">ADD TURTLE</a>
+
+  {{#if turtles.length}}
+    <table style="width:100%; margin-top:20px;">
+      <tr>
+        <th>Name</th>
+        <th>Species</th>
+        <th>Actions</th>
+      </tr>
+
+      {{#each turtles}}
+        <tr>
+          <td>{{name_of_turtle}}</td>
+          <td>{{species}}</td>
+          <td>
+            <a href="/turtles/edit/{{id}}" class="btn-pink">Edit</a>
+            <a href="/turtles/delete/{{id}}" class="btn-pink">Delete</a>
+          </td>
+        </tr>
+      {{/each}}
+    </table>
+  {{else}}
+    <p>No turtles yet 🐢</p>
+  {{/if}}
+</div>

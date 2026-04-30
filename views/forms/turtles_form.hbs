@@ -1,0 +1,45 @@
+<div class="main-container">
+  <a href="/turtles" class="btn-pink">CANCEL</a>
+
+  {{#if error}}
+    <div class="error-box">{{error}}</div>
+  {{/if}}
+
+  <form method="POST" action="{{action}}">
+    <fieldset>
+
+      <label>
+        Turtle Name
+        <input type="text" name="name_of_turtle" value="{{item.name_of_turtle}}" />
+      </label>
+
+      <label>
+        Species
+        <input type="text" name="species" value="{{item.species}}" />
+      </label>
+
+      <label>
+        Habitat
+        <input type="text" name="habitat" value="{{item.habitat}}" />
+      </label>
+
+      <label>
+        Lifespan
+        <input type="text" name="average_lifespan" value="{{item.average_lifespan}}" />
+      </label>
+
+      <label>
+        Diet
+        <input type="text" name="diet" value="{{item.diet}}" />
+      </label>
+
+      <label>
+        Info
+        <input type="text" name="additional_info" value="{{item.additional_info}}" />
+      </label>
+
+    </fieldset>
+
+    <input type="submit" value="{{buttonText}}" class="btn-pink" style="width:100%;" />
+  </form>
+</div>

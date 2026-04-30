@@ -317,6 +317,18 @@ createTableQueries.push ( `
 );
    `);
 
+createTableQueries.push (`
+    CREATE TABLE IF NOT EXISTS turtles (
+  id SERIAL PRIMARY KEY,
+  name_of_turtle TEXT UNIQUE NOT NULL,
+  species TEXT NOT NULL,
+  habitat TEXT NOT NULL,
+  average_lifespan TEXT NOT NULL,
+  diet TEXT NOT NULL,
+  additional_info TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`)
+
 for await (const query of createTableQueries) {
     try {
         console.log(query.slice(0, query.indexOf('(')).trim() + "...")
