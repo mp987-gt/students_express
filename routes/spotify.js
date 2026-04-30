@@ -2,116 +2,134 @@ import express from 'express';
 const router = express.Router();
 import db from '../db/connector.js';
 
-// валідація
 
-function validateSongBody({ title, artist, genre, duration }) {
-    const errors = [];
+// класи 
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
 
-    if (!title || !title.trim())
-        errors.push('Title is required');
-    else if (title.trim().length > 200)
-        errors.push('Title must be ≤ 200 characters');
-
-    if (!artist || !artist.trim())
-        errors.push('Artist is required');
-    else if (artist.trim().length > 200)
-        errors.push('Artist must be ≤ 200 characters');
-
-    if (!genre || !genre.trim())
-        errors.push('Genre is required');
-    else if (genre.trim().length > 100)
-        errors.push('Genre must be ≤ 100 characters');
+class Song {
+  constructor({ title, artist, genre, duration }) {
+    if (!title || !title.trim()) {
+      throw new ValidationError("Назва пісні не може бути порожньою");
+    } else if (!artist || !artist.trim()) {
+      throw new ValidationError("Виконавець не може бути порожнім");
+    } else if (!genre || !genre.trim()) {
+      throw new ValidationError("Жанр не може бути порожнім");
+    } else if (!duration) {
+      throw new ValidationError("Тривалість обов'язкова");
+    }
 
     const dur = Number(duration);
-    if (!duration && duration !== 0)
-        errors.push('Duration is required');
-    else if (!Number.isInteger(dur) || dur < 1 || dur > 86400)
-        errors.push('Duration must be a whole number between 1 and 86400 seconds');
-
-    return errors;
-}
-
-function validateId(id) {
-    const n = Number(id);
-    if (!Number.isInteger(n) || n < 1)
-        return 'ID must be a positive integer';
-    return null;
-}
-
-// Головна сторінка
-router.get('/', async (req, res) => {
-    try {
-        const result = await db.query('SELECT * FROM songs ORDER BY id ASC');
-        res.render('spotify', { tracks: result.rows });
-    } catch (err) {
-        res.status(500).send("Database Error: " + err.message);
+    if (isNaN(dur) || dur < 1) {
+      throw new ValidationError("Тривалість має бути числом більше 0");
     }
+
+    this.title = title.trim();
+    this.artist = artist.trim();
+    this.genre = genre.trim();
+    this.duration = dur;
+  }
+}
+
+// Головна сторінка 
+router.get('/', async function (req, res) {
+  try {
+    const result = await db.query('SELECT * FROM songs ORDER BY id ASC');
+    res.render('spotify', { tracks: result.rows || [] });
+  } catch (err) {
+    res.status(500).send("Помилка бази даних: " + err.message);
+  }
 });
 
 // Форма створення
 router.get('/create', (req, res) => {
-    res.render('forms/spotify_form', { item: {}, isUpdate: false });
+  res.render('forms/spotify_form', { 
+    title: 'ADD NEW TRACK', 
+    item: {}, 
+    isUpdate: false,
+    action: '/spotify/create' 
+  });
 });
 
-// Форма редагування
-router.get('/update/:id', async (req, res) => {
-    const idError = validateId(req.params.id);
-    if (idError) return res.status(400).send(idError);
-
-    try {
-        const result = await db.query('SELECT * FROM songs WHERE id = $1', [req.params.id]);
-        if (result.rows.length === 0) return res.status(404).send("Track not found");
-        res.render('forms/spotify_form', { item: result.rows[0], isUpdate: true });
-    } catch (err) {
-        res.status(500).send("SQL Error: " + err.message);
+// Обробка створення 
+router.post('/create', async function (req, res) {
+  try {
+    const validSong = new Song(req.body);
+    const query = `
+      INSERT INTO songs (title, artist, genre, duration)
+      VALUES ($1, $2, $3, $4)`;
+    
+    await db.query(query, [
+      validSong.title,
+      validSong.artist,
+      validSong.genre,
+      validSong.duration
+    ]);
+    res.redirect('/spotify');
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return res.status(400).send(`Помилка валідації: ${err.message}`);
     }
+    res.status(500).send(`Помилка сервера: ${err.message}`);
+  }
 });
 
-// Обробка створення
-router.post('/create', async (req, res) => {
-    const { title, artist, genre, duration } = req.body;
+// Форма редагування 
+router.get('/update/:id', async function (req, res) {
+  try {
+    const result = await db.query('SELECT * FROM songs WHERE id = $1', [req.params.id]);
+    const item = result.rows[0];
 
-    const errors = validateSongBody({ title, artist, genre, duration });
-    if (errors.length > 0) return res.status(400).send(errors.join('<br>'));
+    if (!item) return res.status(404).send("Трек не знайдено");
 
-    try {
-        const query = 'INSERT INTO songs (title, artist, genre, duration) VALUES ($1, $2, $3, $4)';
-        await db.query(query, [title.trim(), artist.trim(), genre.trim(), Number(duration)]);
-        res.redirect('/spotify');
-    } catch (err) {
-        res.status(500).send("❌ SQL Error: " + err.message);
-    }
+    res.render('forms/spotify_form', {
+      title: 'EDIT TRACK',
+      item,
+      isUpdate: true,
+      action: `/spotify/update/${item.id}`
+    });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
-// Обробка оновлення..
-router.post('/update/:id', async (req, res) => {
-    const idError = validateId(req.params.id);
-    if (idError) return res.status(400).send(idError);
-
-    const { title, artist, genre, duration } = req.body;
-    const errors = validateSongBody({ title, artist, genre, duration });
-    if (errors.length > 0) return res.status(400).send(errors.join('<br>'));
-
-    try {
-        const query = 'UPDATE songs SET title=$1, artist=$2, genre=$3, duration=$4 WHERE id=$5';
-        await db.query(query, [title.trim(), artist.trim(), genre.trim(), Number(duration), req.params.id]);
-        res.redirect('/spotify');
-    } catch (err) {
-        res.status(500).send("❌ Update Error: " + err.message);
+// Обробка оновлення 
+router.post('/update/:id', async function (req, res) {
+  try {
+    const validSong = new Song(req.body);
+    const query = `
+      UPDATE songs
+      SET title = $1, artist = $2, genre = $3, duration = $4
+      WHERE id = $5`;
+    
+    await db.query(query, [
+      validSong.title,
+      validSong.artist,
+      validSong.genre,
+      validSong.duration,
+      req.params.id
+    ]);
+    res.redirect('/spotify');
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return res.status(400).send(`Помилка оновлення: ${err.message}`);
     }
+    res.status(500).send(err.message);
+  }
 });
 
 // Видалення
-router.get('/delete/:id', async (req, res) => {
-    const idError = validateId(req.params.id);
-    if (idError) return res.status(400).send(idError);
-
-    try {
-        await db.query('DELETE FROM songs WHERE id = $1', [req.params.id]);
-        res.redirect('/spotify');
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+router.get("/delete/:id", async (req, res) => {
+  try {
+    await db.query("DELETE FROM songs WHERE id = $1", [req.params.id]);
+    res.redirect("/spotify");
+  } catch (err) {
+    res.status(500).send("Не вдалося видалити трек");
+  }
 });
 
 export default router;

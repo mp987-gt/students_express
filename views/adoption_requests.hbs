@@ -1,0 +1,141 @@
+<style>
+  body {
+    background-color: #fc85bc;
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .main-container {
+    background: rgba(250, 159, 209, 0.884);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 95%;
+    max-width: 900px;
+    margin: 20px auto;
+  }
+
+  .btn-pink {
+    background-color: rgb(233, 75, 167);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    margin-bottom: 20px;
+    color: #fff !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  th, td {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ffb3d9;
+  }
+</style>
+
+{{#if mode}}
+  <div class="main-container">
+    <h2>{{pageTitle}}</h2>
+
+    <form action="{{action}}" method="POST">
+      <div class="form-group">
+        <label>Pet ID:</label>
+        <input type="number" name="pet_id" value="{{item.pet_id}}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Name:</label>
+        <input type="text" name="applicant_name" value="{{item.applicant_name}}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Phone:</label>
+        <input type="text" name="applicant_phone" value="{{item.applicant_phone}}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" name="applicant_email" value="{{item.applicant_email}}" />
+      </div>
+
+      <div class="form-group">
+        <label>Message:</label>
+        <textarea name="message">{{item.message}}</textarea>
+      </div>
+
+      <button type="submit" class="btn-pink" style="width:100%">SAVE</button>
+      <a href="/requests" class="btn-pink" style="width:100%">CANCEL</a>
+    </form>
+  </div>
+
+{{else}}
+  <div class="main-container">
+    <a href="/" class="btn-pink">BACK</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Pet ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th colspan="2">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each requests}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.pet_id}}</td>
+            <td>{{this.applicant_name}}</td>
+            <td>{{this.applicant_phone}}</td>
+            <td>{{this.status}}</td>
+            <td>{{this.created_at}}</td>
+
+            <td>
+              <a href="/requests/edit/{{this.id}}" class="btn-pink">EDIT</a>
+            </td>
+
+            <td>
+              <a href="/requests/delete/{{this.id}}" class="btn-pink" onclick="return confirm('Delete?')">
+                DELETE
+              </a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <a href="/requests/create" class="btn-pink">Create Request</a>
+  </div>
+{{/if}}

@@ -29,6 +29,18 @@ createTableQueries.push(`
     );
 `);
 
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS movies (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        director TEXT NOT NULL,
+        release_year INTEGER NOT NULL,
+        rating NUMERIC(3,1),
+        genre TEXT,
+        status TEXT,
+        poster_url TEXT,
+    );
+`);
 
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS heroes (
@@ -99,6 +111,20 @@ createTableQueries.push(`
         user_id INTEGER REFERENCES street_food_users(id) ON DELETE SET NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+`);
+
+createTableQueries.push(`
+  CREATE TABLE IF NOT EXISTS adoption_requests (
+    id SERIAL PRIMARY KEY,
+    pet_id INTEGER NOT NULL,
+    applicant_name TEXT NOT NULL,
+    applicant_phone TEXT NOT NULL,
+    applicant_email TEXT,
+    message TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 createTableQueries.push(`

@@ -1,219 +1,57 @@
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-        background: #0b0e14;
-        color: white;
-        font-family: 'Segoe UI', Roboto, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    body { background: #0b0e14; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px; display: flex; justify-content: center; }
+    .container { max-width: 600px; width: 100%; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+    .btn-back { background: rgba(255,255,255,0.05); color: #888; padding: 10px 20px; border-radius: 12px; text-decoration: none; border: 1px solid #333; transition: 0.3s; }
+    .btn-back:hover { color: white; border-color: #1DB954; }
+    h1 { font-size: 2.2rem; margin: 0; background: linear-gradient(to right, #fff, #1DB954); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .form-box { background: #1a1d24; border-radius: 24px; border: 1px solid #333; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .group { margin-bottom: 20px; }
+    label { display: block; color: #1DB954; text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; margin-bottom: 10px; font-weight: bold; }
+    input { width: 100%; padding: 15px; background: #0b0e14; border: 1px solid #333; border-radius: 12px; color: white; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+    input:focus { outline: none; border-color: #1DB954; background: #12161f; }
+    
+    /* Прибираємо стрілочки (spinners) для поля number */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
     }
 
-    .card {
-        background: #141720;
-        border: 1px solid #222;
-        border-radius: 20px;
-        padding: 44px 40px 36px;
-        width: 100%;
-        max-width: 440px;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-    }
-
-    h2 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 32px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    h2::before {
-        content: '';
-        display: inline-block;
-        width: 6px;
-        height: 22px;
-        background: #1DB954;
-        border-radius: 3px;
-    }
-//.
-
-    .field { margin-bottom: 20px; }
-
-    label {
-        display: block;
-        font-size: 11px;
-        font-weight: 600;
-        color: #555;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        margin-bottom: 8px;
-    }
-
-    input {
-        display: block;
-        width: 100%;
-        padding: 13px 16px;
-        background: #1a1d24;
-        border: 1.5px solid #252830;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 0.95rem;
-        transition: border-color 0.2s, background 0.2s;
-        outline: none;
-    }
-
-    input::placeholder { color: #3a3f4a; }
-    input:focus { border-color: #1DB954; background: #1e2129; }
-    input.error { border-color: #e05252; }
-
-    .field-error {
-        font-size: 11px;
-        color: #e05252;
-        margin-top: 6px;
-        display: none;
-    }
-    .field-error.visible { display: block; }
-
-    .actions {
-        margin-top: 32px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .btn-save {
-        width: 100%;
-        padding: 14px;
-        background: #1DB954;
-        color: #000;
-        border: none;
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn-save:hover { background: #1ed760; }
-    .btn-save:active { transform: scale(0.98); }
-
-    .btn-cancel {
-        width: 100%;
-        padding: 13px;
-        background: transparent;
-        color: #555;
-        border: 1.5px solid #252830;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: border-color 0.2s, color 0.2s;
-        display: block;
-    }
-
-    .btn-cancel:hover { border-color: #444; color: #aaa; }
+    .btn-save { width: 100%; background: #1DB954; color: white; padding: 18px; border: none; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 10px 20px rgba(29, 185, 84, 0.2); }
+    .btn-save:hover { background: #1ed760; transform: scale(1.02); }
 </style>
 
-<div class="card">
-    <h2>{{#if isUpdate}}Edit Track{{else}}New Track{{/if}}</h2>
+<div class="container">
+    <div class="nav-bar">
+        <a href="/spotify" class="btn-back">← BACK</a>
+        <h1>{{title}}</h1>
+    </div>
 
-    <form
-        id="song-form"
-        action="{{#if isUpdate}}/spotify/update/{{item.id}}{{else}}/spotify/create{{/if}}"
-        method="POST"
-        novalidate
-    >
-        <div class="field">
-            <label for="title">Title</label>
-            <input id="title" type="text" name="title" value="{{item.title}}" maxlength="200">
-            <span class="field-error" id="err-title">Title is required (max 200 characters)</span>
-        </div>
-
-        <div class="field">
-            <label for="artist">Artist</label>
-            <input id="artist" type="text" name="artist" value="{{item.artist}}" maxlength="200">
-            <span class="field-error" id="err-artist">Artist is required (max 200 characters)</span>
-        </div>
-
-        <div class="field">
-            <label for="genre">Genre</label>
-            <input id="genre" type="text" name="genre" value="{{item.genre}}" maxlength="100">
-            <span class="field-error" id="err-genre">Genre is required (max 100 characters)</span>
-        </div>
-
-        <div class="field">
-            <label for="duration">Duration</label>
-            <input id="duration" type="text" name="duration" value="{{item.duration}}" maxlength="5" inputmode="numeric">
-            <span class="field-error" id="err-duration">Enter duration in seconds</span>
-        </div>
-
-        <div class="actions">
+    <div class="form-box">
+        <form action="{{action}}" method="POST">
+            <div class="group">
+                <label>Track Title</label>
+                <input type="text" name="title" value="{{item.title}}" required>
+            </div>
+            <div class="group">
+                <label>Artist</label>
+                <input type="text" name="artist" value="{{item.artist}}" required>
+            </div>
+            <div class="group">
+                <label>Genre</label>
+                <input type="text" name="genre" value="{{item.genre}}" required>
+            </div>
+            <div class="group">
+                <label>Duration (sec)</label>
+                <input type="number" name="duration" value="{{item.duration}}" required>
+            </div>
             <button type="submit" class="btn-save">
-                {{#if isUpdate}}Save Changes{{else}}Add Track{{/if}}
+                {{#if isUpdate}}SAVE CHANGES{{else}}ADD TRACK{{/if}}
             </button>
-            <a href="/spotify" class="btn-cancel">Cancel</a>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-
-<script>
-    const form = document.getElementById('song-form');
-    const durInput = document.getElementById('duration');
-
-    durInput.addEventListener('keydown', (e) => {
-        const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-        if (allowed.includes(e.key)) return;
-        if (!/^[0-9]$/.test(e.key)) {
-            e.preventDefault();
-        }
-    });
-
-    durInput.addEventListener('input', () => {
-        durInput.value = durInput.value.replace(/[^0-9]/g, '');
-    });
-
-    function validateDuration(val) {
-        return /^\d+$/.test(val.trim()) && val.trim().length > 0;
-    }
-
-    function showError(inputId, errId, condition) {
-        const input = document.getElementById(inputId);
-        const err   = document.getElementById(errId);
-        if (condition) {
-            input.classList.add('error');
-            err.classList.add('visible');
-            return false;
-        }
-        input.classList.remove('error');
-        err.classList.remove('visible');
-        return true;
-    }
-
-    form.addEventListener('submit', (e) => {
-        const title    = document.getElementById('title').value;
-        const artist   = document.getElementById('artist').value;
-        const genre    = document.getElementById('genre').value;
-        const duration = document.getElementById('duration').value;
-
-        const ok = [
-            showError('title',    'err-title',    !title.trim()    || title.trim().length > 200),
-            showError('artist',   'err-artist',   !artist.trim()   || artist.trim().length > 200),
-            showError('genre',    'err-genre',    !genre.trim()    || genre.trim().length > 100),
-            showError('duration', 'err-duration', !validateDuration(duration)),
-        ].every(Boolean);
-
-        if (!ok) e.preventDefault();
-    });
-
-    ['title', 'artist', 'genre', 'duration'].forEach(id => {
-        document.getElementById(id).addEventListener('input', () => {
-            document.getElementById(id).classList.remove('error');
-            document.getElementById('err-' + id).classList.remove('visible');
-        });
-    });
-</script>
