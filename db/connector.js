@@ -385,6 +385,19 @@ createTableQueries.push(`
     );
 `);
 
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS books (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        genre TEXT,
+        pages INTEGER,
+        price NUMERIC(10,2),
+        is_available BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
 for await (const query of createTableQueries) {
     try {
         console.log(query.slice(0, query.indexOf('(')).trim() + "...")
