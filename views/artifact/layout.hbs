@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pda-green: #4af626;
+            --pda-amber: #ffb000;
+            --pda-bg: #0c100a;
+            --pda-card: #161b13;
+            --pda-border: #2a3526;
+        }
+
+        body {
+            background-color: var(--pda-bg);
+            background-image: radial-gradient(circle, #1a2a16 0%, #0c100a 100%);
+            color: var(--pda-green);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 20px;
+            text-shadow: 0 0 5px rgba(74, 246, 38, 0.5);
+        }
+
+        .pda-screen {
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            background: rgba(22, 27, 19, 0.9);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 20px rgba(74, 246, 38, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ефект сканування (лінії) */
+        .pda-screen::before {
+            content: " ";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        h1 {
+            color: var(--pda-amber);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--pda-border);
+            padding-bottom: 10px;
+        }
+
+        .btn-pda {
+            background: var(--pda-border);
+            color: var(--pda-green);
+            border: 1px solid var(--pda-green);
+            padding: 8px 15px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-pda:hover {
+            background: var(--pda-green);
+            color: black;
+            box-shadow: 0 0 15px var(--pda-green);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 20px;
+        }
+
+        th {
+            color: var(--pda-amber);
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid var(--pda-border);
+        }
+
+        td {
+            background: rgba(42, 53, 38, 0.3);
+            padding: 12px;
+            border-top: 1px solid var(--pda-border);
+            border-bottom: 1px solid var(--pda-border);
+        }
+
+        td:first-child { border-left: 1px solid var(--pda-border); border-radius: 5px 0 0 5px; }
+        td:last-child { border-right: 1px solid var(--pda-border); border-radius: 0 5px 5px 0; }
+
+        .rarity-legendary { color: #ff4500; font-weight: bold; }
+        .rarity-rare { color: #00ced1; }
+        .rarity-common { color: var(--pda-green); }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--pda-amber);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="pda-screen">
+        {{{body}}}
+    </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">
+    <h1>[ Clothes Shop ]</h1>
+    <a href="/clothing/create" class="btn-cyber">ADD NEW ITEM +</a>
+</div>
+
+<div class="clothing-grid">
+    {{#each items}}
+    <div class="clothing-card">
+        <div class="card-header">
+            <div>
+                <div class="brand-label">{{this.brand}}</div>
+                <div class="item-type">{{this.type}}</div>
+            </div>
+            <div class="price-tag">${{this.price}}</div>
+        </div>
+
+        <div class="card-body">
+            <div class="info-row">
+                <span class="info-label">Size:</span>
+                <span class="info-value"><span class="stock-badge">{{this.size}}</span></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Stock:</span>
+                <span class="info-value">{{this.stock_quantity}} pcs</span>
+            </div>
+        </div>
+
+        <div class="card-actions">
+            <a href="/clothing/edit/{{this.id}}" class="btn-action">EDIT</a>
+            <form action="/clothing/delete/{{this.id}}" method="POST" onsubmit="return confirm('Видалити цей товар з бази?')">
+                <button type="submit" class="btn-action btn-delete" style="border: none; cursor: pointer; width: 100%;">DELETE</button>
+            </form>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<div style="margin-top: 50px;">
+    <a href="/" style="color: var(--text-muted); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">← System Dashboard</a>
+</div>

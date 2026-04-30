@@ -1,0 +1,40 @@
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>[ РЕЄСТР АРТЕФАКТІВ СИДОРОВИЧА ]</h1>
+    <a href="/artifacts/create" class="btn-pda">+ ДОДАТИ ОБ'ЄКТ</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>НАЗВА</th>
+            <th>АНОМАЛІЯ</th>
+            <th>РІДКІСТЬ</th>
+            <th>РАДІАЦІЯ</th>
+            <th>ЦІНА (купони)</th>
+            <th>ДІЇ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each items}}
+        <tr>
+            <td>#{{this.id}}</td>
+            <td><strong>{{this.name}}</strong></td>
+            <td>{{this.origin_anomaly}}</td>
+           <td class="rarity-{{this.rarity}}">{{this.rarity}}</td>
+            <td>{{this.radiation_level}} mSv</td>
+            <td>{{this.market_value}}</td>
+            <td>
+                <div style="display: flex; gap: 10px;">
+                    <a href="/artifacts/edit/{{this.id}}" class="btn-pda" style="font-size: 10px; border-color: var(--pda-amber); color: var(--pda-amber);">EDIT</a>
+                    <form action="/artifacts/delete/{{this.id}}" method="POST" onsubmit="return confirm('Видалити дані про об\'єкт?')">
+                        <button type="submit" class="btn-pda" style="font-size: 10px; border-color: #ef4444; color: #ef4444; background: none;">DELETE</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<a href="/" class="back-link"><< ПОВЕРНУТИСЯ ДО ГОЛОВНОГО МЕНЮ</a>

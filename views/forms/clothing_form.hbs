@@ -1,0 +1,138 @@
+<style>
+    /* Стилізація конкретно для форми */
+    .form-wrapper {
+        max-width: 600px;
+        margin: 60px auto;
+        background: #14171f;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .form-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8rem;
+        color: #fff;
+        margin-bottom: 30px;
+        text-align: center;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .input-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        color: #94a3b8;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #fff;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #a855f7;
+        background: rgba(168, 85, 247, 0.05);
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+
+    input::placeholder {
+        color: #475569;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 35px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-cancel {
+        text-align: center;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.2s;
+    }
+
+    .btn-cancel:hover {
+        color: #fff;
+    }
+</style>
+
+<div class="form-wrapper">
+    <h2 class="form-title">{{title}}</h2>
+    
+    <form action="/clothing/{{#if isEdit}}edit/{{item.id}}{{else}}create{{/if}}" method="POST">
+        <div class="input-group">
+            <label for="type">Тип товару</label>
+            <input type="text" id="type" name="type" placeholder="Напр: Худі, Футболка" value="{{item.type}}" required>
+        </div>
+
+        <div class="input-group">
+            <label for="brand">Бренд</label>
+            <input type="text" id="brand" name="brand" placeholder="Напр: Nike, Off-White" value="{{item.brand}}" required>
+        </div>
+
+        <div class="input-group">
+            <label for="size">Розмір</label>
+            <input type="text" id="size" name="size" placeholder="L, XL, 42" value="{{item.size}}" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="input-group">
+                <label for="price">Ціна ($)</label>
+                <input type="number" id="price" name="price" placeholder="0.00" step="0.01" value="{{item.price}}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="stock_quantity">Кількість</label>
+                <input type="number" id="stock_quantity" name="stock_quantity" placeholder="0" value="{{item.stock_quantity}}" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">
+                {{#if isEdit}}Оновити дані{{else}}Зберегти в базу{{/if}}
+            </button>
+            <a href="/clothing/list" class="btn-cancel">Скасувати та повернутись</a>
+        </div>
+    </form>
+</div>

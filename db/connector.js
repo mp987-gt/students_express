@@ -283,6 +283,33 @@ createTableQueries.push(`
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
+createTableQueries.push(`
+    CREATE TABLE IF NOT EXISTS artifacts (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        origin_anomaly TEXT NOT NULL,
+        rarity TEXT DEFAULT 'Common',
+        radiation_level NUMERIC(10,2),
+        weight NUMERIC(10,2),
+        market_value INTEGER,
+        is_contained BOOLEAN DEFAULT TRUE,
+        stalker_owner TEXT,
+        properties_notes TEXT,
+        found_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`);
+    
+createTableQueries.push(`
+    DROP TABLE IF EXISTS clothing;
+
+    CREATE TABLE clothing (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(255),
+    brand VARCHAR(255),
+    size VARCHAR(50),
+    price DECIMAL(10, 2),
+    stock_quantity INTEGER DEFAULT 0
+);  
+`);
 
 createTableQueries.push(`
     CREATE TABLE IF NOT EXISTS kittens (
