@@ -27,6 +27,9 @@ import accountsRouter from './routes/accounts.js'
 import housesRouter from './routes/houses.js';
 import spotifyRouter from './routes/spotify.js';
 import notabugRouter from './routes/notabug.js'
+import artifactRouter from './routes/artifacts.js';
+import clothingRouter from './routes/clothing.js';
+import turtleRouter from './routes/turtle.js';
 import kittensRouter from './routes/kittens.js'
 
 import { fileURLToPath } from 'url';
@@ -46,11 +49,14 @@ hbs.registerHelper('eq', function (a, b) {
   return a === b;
 });
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 app.use('/', indexRouter);
 app.use('/movies', moviesRouter);
@@ -69,9 +75,16 @@ app.use('/product', productRouter);
 app.use('/villains', batmanRouter);
 app.use('/bar', barRouter);
 app.use('/accounts', accountsRouter);
+app.use('/pesyki', pesykiRouter);
+app.use('/brawlers', brawlerRouter);
+
+app.use('/artifacts', artifactRouter);
+
 app.use('/houses', housesRouter);
 app.use('/spotify', spotifyRouter);
 app.use('/notabug', notabugRouter);
+app.use('/clothing', clothingRouter);
+
 app.use('/kittens', kittensRouter);
 app.use('/president',presidentRouter);
 

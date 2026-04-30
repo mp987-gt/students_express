@@ -1,0 +1,63 @@
+<style>
+    :root {
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.5rem;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: inherit;
+        border-left: 6px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        background: #2d3748;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    h3 { margin: 10px 0 5px 0; font-size: 1.25rem; }
+</style>
+
+<h1>🚀 University Projects Dashboard</h1>
+<p style="color: var(--text-muted); margin-bottom: 30px;">Dmytro Kviatkovskyi | Software Engineering UKD</p>
+
+<div class="grid">
+    <a href="/clothing/list" class="card" style="border-left-color: #6366f1;">
+        <span style="font-size: 32px;">👕</span>
+        <h3>Cyber Apparel</h3>
+        <p style="font-weight: normal; font-size: 14px; color: var(--text-muted);">Управління преміальним складом одягу в Dark Mode стилі.</p>
+    </a>
+
+    <a href="/artifacts/inventory" class="card" style="border-left-color: #4af626;">
+        <span style="font-size: 32px;">☢️</span>
+        <h3>Sidorovich's PDA</h3>
+        <p style="font-weight: normal; font-size: 14px; color: var(--text-muted);">Система обліку артефактів Зони. Стилізація під КПК.</p>
+    </a>
